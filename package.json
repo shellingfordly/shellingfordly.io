@@ -8,10 +8,16 @@
     "build": "vite build"
   },
   "devDependencies": {
+    "@types/node": "^17.0.31",
     "@vitejs/plugin-vue": "^2.3.2",
+    "less": "^4.1.2",
+    "unplugin-auto-import": "^0.7.1",
     "vite": "^2.9.8"
   },
   "dependencies": {
-    "vue": "^3.2.33"
+    "moment": "^2.29.3",
+    "vue": "^3.2.33",
+    "vue-i18n": "^9.1.10",
+    "vue-router": "^4.0.15"
   }
 }

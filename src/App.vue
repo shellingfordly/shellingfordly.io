@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import "http://zhouql.vip/cdn/blast.js";
+import Layout from "./layout/index.vue";
 </script>
 
 <template>
-  <div class="container"></div>
+  <Layout />
 </template>
