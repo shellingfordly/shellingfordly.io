@@ -33,6 +33,12 @@ const navList = [
 ];
 
 const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
+
+const router = useRouter();
+
+function go(path: string) {
+  router.push(path);
+}
 </script>
 
 <template>
@@ -44,7 +50,7 @@ const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
         <span>{{ item.author }}</span>
         <span>{{ item.tag }}</span>
         <span>{{ deteFormat(item.date) }}</span>
-        <span class="title">{{ item.title }}</span>
+        <span class="title" @click="go(item.path)">{{ item.title }}</span>
       </li>
     </ul>
   </div>
@@ -59,7 +65,12 @@ const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
       }
 
       .title {
-        color: aqua;
+        color: @linkText;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

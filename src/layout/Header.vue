@@ -1,7 +1,3 @@
-<script lang="ts" setup>
-import Search from "../components/Search.vue";
-</script>
-
 <template>
   <div class="header">
     <p>Last Login: Fri Apr 29 14:39:04 on ttys012</p>
@@ -10,7 +6,4 @@ import Search from "../components/Search.vue";
       /Users/Workspace/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     </p>
   </div>
-  <Search />
 </template>
-
-<style scoped lang="less"></style>
