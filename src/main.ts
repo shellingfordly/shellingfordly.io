@@ -4,7 +4,7 @@ import "./styles/index.less";
 import autoRoutes from "pages-generated";
 import { ViteSSG } from "vite-ssg";
 import NProgress from "nprogress";
-import {} from "pinia";
+import { createPinia } from "pinia";
 
 const routes = autoRoutes.map((i) => {
   return {
@@ -21,7 +21,8 @@ const scrollBehavior = (to: any, from: any, savedPosition: any) => {
 export const createApp = ViteSSG(
   App,
   { routes, scrollBehavior },
-  ({ router, isClient }) => {
+  ({ app, router, isClient }) => {
+    app.use(createPinia());
     if (isClient) {
       router.beforeEach(() => {
         NProgress.start();

@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import moment from "moment";
+import { useStore } from "@/store";
+import * as moment from "moment";
+import { getRouteMap } from "../contants";
+
+const store = useStore();
 
 const navList = [
   {
@@ -35,6 +39,8 @@ const navList = [
 const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
 
 const router = useRouter();
+
+console.log("router", router.getRoutes());
 
 function go(path: string) {
   router.push(path);

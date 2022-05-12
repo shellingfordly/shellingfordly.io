@@ -1,5 +1,10 @@
 <script lang="ts" setup>
+import { CommandType } from "@/enum";
+import { commandValue } from "@/hooks/useCommand";
+
 const props = defineProps<{
+  type?: CommandType;
+  path?: string;
   value?: string;
 }>();
 
@@ -7,10 +12,15 @@ const searchRef = ref();
 const searchValue = ref("");
 const emit = defineEmits(["onEnter"]);
 const isText = ref(!!props.value);
+const path = ref("~");
 
-onMounted(() => {
+onMounted(async () => {
   if (searchRef.value) {
     searchRef.value.focus();
+  }
+  await nextTick();
+  if (props.type === CommandType.Route || commandValue.value) {
+    path.value = props.path || commandValue.value;
   }
 });
 
@@ -26,7 +36,7 @@ function onKeyup(e: any) {
 <template>
   <div class="command">
     <span class="arrow">➜</span>
-    <span class="path">~</span>
+    <span class="path">{{ path }}</span>
     <span v-if="isText">{{ value || searchValue }}</span>
     <input
       v-else
@@ -60,7 +70,8 @@ function onKeyup(e: any) {
     color: @commonText;
     font-size: 22px;
     font-weight: 500;
-    min-width: calc(100% - 70px);
+    max-width: calc(100% - 70px);
+    min-width: calc(100% - 200px);
   }
 }
 </style>

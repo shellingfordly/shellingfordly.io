@@ -28,6 +28,9 @@ export default defineConfig({
   server: {
     port: 4000,
   },
+  resolve: {
+    alias: [{ find: "@/", replacement: `${resolve(__dirname, "src")}/` }],
+  },
   css: {
     preprocessorOptions: {
       less: {
