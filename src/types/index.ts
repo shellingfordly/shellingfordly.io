@@ -5,6 +5,7 @@ export interface CommandModel {
   value: string;
   errorType?: ErrorType;
   errorValue?: string;
+  content?: Partial<RouteItem>;
 }
 
 export interface RouteItem {

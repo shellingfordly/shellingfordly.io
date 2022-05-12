@@ -17,6 +17,7 @@ const handleCommand = useCommand();
 
 function onEnter(value: string) {
   const command = handleCommand(value);
+  console.log("command", command);
   commandList.push(command);
 }
 </script>
@@ -25,10 +26,13 @@ function onEnter(value: string) {
   <div class="layout">
     <Header />
     <Command value="ll" />
-    <CommandResult />
+    <CommandResult :route-map="store.routeMap" />
     <Command @on-enter="onEnter" />
     <div v-for="command in commandList">
-      <CommandResult v-if="command.type === CommandType.Route" />
+      <CommandResult
+        v-if="command.type === CommandType.Route"
+        :route-map="command.content.children"
+      />
       <CommandError
         v-else-if="command.type === CommandType.Error"
         v-bind="command"

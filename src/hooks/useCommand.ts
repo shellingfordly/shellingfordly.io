@@ -1,6 +1,6 @@
 import { CommandType, ErrorType } from "@/enum";
 import { useStore } from "@/store";
-import { CommandModel } from "@/types";
+import { CommandModel, RouteItem } from "@/types";
 
 // 指令内容缓存
 export const commandValue = ref("");
@@ -21,7 +21,8 @@ const commandMap = {
   },
   cat(routerMap, value: string) {},
   ll(routerMap, value: string) {
-    return handleRoute(value || commandValue.value);
+    const path = value || commandValue.value;
+    return handleRoute(path, routerMap[path]);
   },
   help(routerMap, value: string) {},
 };
@@ -52,10 +53,14 @@ function parseCommandString(comStr: string) {
   };
 }
 
-function handleRoute(value: string): CommandModel {
+function handleRoute(
+  value: string,
+  content: Partial<RouteItem> = {}
+): CommandModel {
   return {
     type: CommandType.Route,
     value,
+    content,
   };
 }
 
