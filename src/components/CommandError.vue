@@ -7,19 +7,26 @@ const props = defineProps<{
 }>();
 
 const errorMessage = computed(() => {
+  const value = props.errorValue;
   switch (props.errorType) {
     case ErrorType.Command:
-      return "Command not found:";
+      return `cmd: command not found: ${value}`;
     case ErrorType.Route:
-      return "Path not found:";
+      return `cmd: path not found: ${value}`;
     case ErrorType.Page:
-      return "Page not found:";
+      return `cmd: page not found: ${value}`;
+    case ErrorType.NotRoute:
+      return `cd: not a directory: ${value}`;
+    case ErrorType.NotPage:
+      return `cat: not a article: ${value}`;
+    case ErrorType.NotFindRouteOrPage:
+      return `cd: no such file or directory: ${value}`;
     default:
-      return "Unknown command:";
+      return `Unknown command: ${value}`;
   }
 });
 </script>
 
 <template>
-  <div class="error">{{ errorMessage }} {{ errorValue }}</div>
+  <div class="error">{{ errorMessage }}</div>
 </template>

@@ -1,7 +1,7 @@
-import { CommandType, ErrorType } from "@/enum";
+import { ResultType, ErrorType } from "@/enum";
 
 export interface CommandModel {
-  type: CommandType;
+  type: ResultType;
   value: string;
   errorType?: ErrorType;
   errorValue?: string;
@@ -11,7 +11,7 @@ export interface CommandModel {
 export interface RouteItem {
   name: string;
   path: string;
-  type: CommandType;
+  type: ResultType;
   parent: string;
   title: string;
   permission: string;
@@ -22,3 +22,8 @@ export interface RouteItem {
 }
 
 export type RouteMap = Record<string, RouteItem>;
+
+export interface HistoryModel {
+  routes: RouteItem[];
+  path: string;
+}

@@ -1,15 +1,35 @@
 <script lang="ts" setup>
+import { ResultType } from "@/enum";
 import { RouteMap } from "@/types";
 import * as moment from "moment";
+import { PropType } from "vue";
 
-const props = defineProps<{
-  routeMap?: RouteMap;
-}>();
+const props = defineProps({
+  content: {
+    type: Object as PropType<RouteMap>,
+  },
+  type: {
+    type: Number as PropType<ResultType>,
+    default: ResultType.Route,
+  },
+});
 
 const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
 
-const routeList = computed(() => {
-  return Object.values(props.routeMap).sort((a, b) => +a.name - +b.name);
+const list = computed(() => {
+  if (!props.content) {
+    return [];
+  }
+
+  if (props.type === ResultType.Help) {
+    return Object.entries(props.content);
+  }
+
+  if (props.content.type === undefined) {
+    return Object.values(props.content);
+  } else {
+    return Object.values(props.content.children);
+  }
 });
 
 const router = useRouter();
@@ -22,13 +42,19 @@ function go(path: string) {
 <template>
   <div class="nav-bar">
     <ul class="list">
-      <li class="item" v-for="(item, index) in routeList">
-        <span>{{ item.permission }}</span>
-        <span>{{ index + 1 }}</span>
-        <span>{{ item.author }}</span>
-        <span>{{ item.tag }}</span>
-        <span>{{ deteFormat(item.date) }}</span>
-        <span class="title" @click="go(item.path)">{{ item.name }}</span>
+      <li class="item" v-for="(item, index) in list">
+        <template v-if="type === ResultType.Route">
+          <span>{{ item.permission }}</span>
+          <span>{{ index + 1 }}</span>
+          <span>{{ item.author }}</span>
+          <span>{{ item.tag }}</span>
+          <span>{{ deteFormat(item.date) }}</span>
+          <span class="title" @click="go(item.path)">{{ item.name }}</span>
+        </template>
+        <template v-else-if="type === ResultType.Help">
+          <span>{{ item[0] }}:</span>
+          <span>{{ item[1] }}</span>
+        </template>
       </li>
     </ul>
   </div>

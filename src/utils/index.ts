@@ -1,4 +1,4 @@
-import { CommandType, PermissionType } from "@/enum";
+import { ResultType, PermissionType } from "@/enum";
 import { RouteMap } from "@/types";
 import { cloneDeep } from "lodash";
 import { RouteRecordNormalized } from "vue-router";
@@ -6,14 +6,12 @@ import { RouteRecordNormalized } from "vue-router";
 export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
   Object.values(baseRoute).forEach((route) => {
-    console.log("route", route.meta.frontmatter);
-
     const name = route.name as string;
     if (!name.includes("-")) {
       routeMap[name] = createRouteItem(
         name,
         route.path,
-        CommandType.Route,
+        ResultType.Route,
         "",
         route.meta.frontmatter
       );
@@ -30,7 +28,7 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
     const index = nameStr.indexOf("-");
     const name = index !== -1 ? nameStr.slice(0, index) : nameStr;
     const childName = index !== -1 ? nameStr.slice(index + 1) : "";
-    const type = childName ? CommandType.Route : CommandType.Page;
+    const type = childName ? ResultType.Route : ResultType.Page;
 
     if (routeMap[name]) {
       handleRouteName(childName, route, name);
@@ -54,7 +52,7 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
 function createRouteItem(
   name: string,
   path: string,
-  type: CommandType,
+  type: ResultType,
   parent: string,
   other: any
 ) {

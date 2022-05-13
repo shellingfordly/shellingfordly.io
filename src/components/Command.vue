@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { CommandType } from "@/enum";
-import { commandValue } from "@/hooks/useCommand";
+import { RootRoute } from "@/contants";
+import { ResultType } from "@/enum";
+import { getHistoryRoute } from "@/hooks/useCommand";
 
 const props = defineProps<{
-  type?: CommandType;
+  type?: ResultType;
   path?: string;
   value?: string;
 }>();
@@ -12,15 +13,17 @@ const searchRef = ref();
 const searchValue = ref("");
 const emit = defineEmits(["onEnter"]);
 const isText = ref(!!props.value);
-const path = ref("~");
+const path = ref(RootRoute);
 
 onMounted(async () => {
   if (searchRef.value) {
     searchRef.value.focus();
   }
   await nextTick();
-  if (props.type === CommandType.Route || commandValue.value) {
-    path.value = props.path || commandValue.value;
+  const route = getHistoryRoute();
+
+  if ((props.type === ResultType.Route && props.path) || route) {
+    path.value = props.path || (route.name as string) || RootRoute;
   }
 });
 
