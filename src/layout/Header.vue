@@ -1,9 +1,34 @@
+<script lang="ts" setup>
+import { LAST_LOGIN } from "@/contants";
+import * as moment from "moment";
+
+let nowLogin = moment();
+const ll = localStorage.getItem(LAST_LOGIN);
+const lastLogin = ll ? moment(JSON.parse(ll)) : nowLogin;
+
+if (!ll) {
+  localStorage.setItem(LAST_LOGIN, JSON.stringify(nowLogin));
+}
+</script>
+
 <template>
   <div class="header">
-    <p>Last Login: Fri Apr 29 14:39:04 on ttys012</p>
+    <p>Last Login: {{ lastLogin }}</p>
     <p>
-      /Users/.zshrc:source:100: no such file or directory:
-      /Users/Workspace/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      The old version of the Blog:
+      <a
+        class="old-blog"
+        href="https://shellingfordly.gitee.io/"
+        target="_blank"
+      >
+        shellingfordly
+      </a>
     </p>
   </div>
 </template>
+
+<style lang="less" scoped>
+.old-blog {
+  color: @commonText;
+}
+</style>

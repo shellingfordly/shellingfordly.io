@@ -12,14 +12,11 @@ const store = useStore();
 
 store.setRouteMap(router.getRoutes());
 
-console.log("store", store.routeMap);
-
 const commandList = reactive<any[]>([]);
 const handleCommand = useCommand();
 
 function onEnter(value: string) {
   const command = handleCommand(value);
-  console.log("command", command);
   if (command.type === ResultType.Page) {
     router.push(command.content.path);
   }
