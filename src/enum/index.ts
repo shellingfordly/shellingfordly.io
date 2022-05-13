@@ -20,7 +20,7 @@ export enum ErrorType {
   NotFindRouteOrPage,
 }
 
-export enum PermissionType {
+export enum FileType {
   Route = "--directory--",
   Page = "--article--",
 }

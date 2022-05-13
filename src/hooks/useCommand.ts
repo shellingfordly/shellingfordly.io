@@ -1,4 +1,4 @@
-import { helpCommand, RootRoute } from "@/contants";
+import { helpCommand, LastRoute, RootRoute } from "@/contants";
 import { ResultType, ErrorType, CommandType } from "@/enum";
 import { useStore } from "@/store";
 import { CommandModel, HistoryModel, RouteItem, RouteMap } from "@/types";
@@ -15,7 +15,16 @@ const commandMap = {
       history.routes = [];
       return handleRoute("");
     }
-    const route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
+
+    let route: RouteItem;
+
+    if (value === LastRoute) {
+      history.routes.pop();
+      value = "";
+      route = getHistoryRoute() as RouteItem;
+    } else {
+      route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
+    }
 
     if (route && route.type === ResultType.Route) {
       history.routes.push(route as RouteItem);

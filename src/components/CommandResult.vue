@@ -44,12 +44,12 @@ function go(path: string) {
     <ul class="list">
       <li class="item" v-for="(item, index) in list">
         <template v-if="type === ResultType.Route">
-          <span>{{ item.permission }}</span>
+          <span>{{ item.fileType }}</span>
           <span>{{ index + 1 }}</span>
           <span>{{ item.author }}</span>
           <span>{{ item.tag }}</span>
           <span>{{ deteFormat(item.date) }}</span>
-          <span class="title" @click="go(item.path)">{{ item.name }}</span>
+          <span class="title">{{ item.name }}</span>
         </template>
         <template v-else-if="type === ResultType.Help">
           <span>{{ item[0] }}:</span>
@@ -65,16 +65,22 @@ function go(path: string) {
   .list {
     .item {
       > span {
+        display: inline-block;
         margin-right: 30px;
+      }
+
+      > span:first-child {
+        width: 135px;
+      }
+
+      @media screen and (max-width: 720px) {
+        > span {
+          margin-right: 10px;
+        }
       }
 
       .title {
         color: @linkText;
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
   }

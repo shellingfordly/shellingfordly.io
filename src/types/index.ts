@@ -14,7 +14,7 @@ export interface RouteItem {
   type: ResultType;
   parent: string;
   title: string;
-  permission: string;
+  fileType: string;
   date: string;
   author: string;
   tag: string;

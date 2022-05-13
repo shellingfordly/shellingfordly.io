@@ -1,5 +1,7 @@
 export const RootRoute = "~";
 
+export const LastRoute = "../";
+
 export const helpCommand = {
   ll: "查看当前目录",
   cat: "查看文章内容",

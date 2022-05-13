@@ -1,4 +1,4 @@
-import { ResultType, PermissionType } from "@/enum";
+import { ResultType, FileType } from "@/enum";
 import { RouteMap } from "@/types";
 import { cloneDeep } from "lodash";
 import { RouteRecordNormalized } from "vue-router";
@@ -11,8 +11,9 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
       routeMap[name] = createRouteItem(
         name,
         route.path,
-        ResultType.Route,
+        ResultType.Page,
         "",
+        FileType.Page,
         route.meta.frontmatter
       );
     } else {
@@ -38,6 +39,7 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
         route.path,
         type,
         parent,
+        parent ? FileType.Page : FileType.Route,
         route.meta.frontmatter
       );
       if (childName) {
@@ -54,6 +56,7 @@ function createRouteItem(
   path: string,
   type: ResultType,
   parent: string,
+  fileType,
   other: any
 ) {
   return {
@@ -62,7 +65,7 @@ function createRouteItem(
     type,
     parent,
     title: other.title || "",
-    permission: parent ? PermissionType.Page : PermissionType.Route,
+    fileType,
     date: other.date || new Date(),
     author: other.author || "shellingfordly",
     tag: other.tag || "unknown",
