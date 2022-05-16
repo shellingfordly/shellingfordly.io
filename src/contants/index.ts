@@ -9,3 +9,5 @@ export const helpCommand = {
 };
 
 export const LAST_LOGIN = "LAST_LOGIN";
+
+export const COMMAND_HISTORY = "COMMAND_HISTORY";

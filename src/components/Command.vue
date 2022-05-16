@@ -2,6 +2,7 @@
 import { RootRoute } from "@/contants";
 import { ResultType } from "@/enum";
 import { getHistoryRoute } from "@/hooks/useCommand";
+import { COMMAND_HISTORY } from "@/contants";
 
 const props = defineProps<{
   type?: ResultType;
@@ -14,6 +15,8 @@ const searchValue = ref("");
 const emit = defineEmits(["onEnter"]);
 const isText = ref(!!props.value);
 const path = ref(RootRoute);
+let history = getCommandHistory();
+let index = history.length;
 
 onMounted(async () => {
   if (searchRef.value) {
@@ -27,11 +30,33 @@ onMounted(async () => {
   }
 });
 
+function getCommandHistory(): string[] {
+  return JSON.parse(sessionStorage.getItem(COMMAND_HISTORY) || "[]");
+}
+
+function setCommandHistory(value: string) {
+  const h = getCommandHistory();
+  h.push(value);
+  sessionStorage.setItem(COMMAND_HISTORY, JSON.stringify(h));
+}
+
 function onKeyup(e: any) {
-  const code = e.keyCode;
-  if (code === 13) {
-    isText.value = true;
-    emit("onEnter", searchValue.value);
+  const keyCode = e.keyCode;
+
+  switch (keyCode) {
+    case 13:
+      isText.value = true;
+      setCommandHistory(searchValue.value);
+      history = getCommandHistory();
+      emit("onEnter", searchValue.value);
+      break;
+    case 38:
+      searchValue.value = history[index > 0 ? --index : 0];
+      break;
+    case 40:
+      searchValue.value = index < history.length ? history[++index] : "";
+    default:
+      break;
   }
 }
 </script>
