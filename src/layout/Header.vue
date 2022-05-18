@@ -3,7 +3,7 @@ import { LAST_LOGIN } from "@/contants";
 import moment from "moment";
 
 let nowLogin = moment();
-const ll = localStorage.getItem(LAST_LOGIN);
+const ll = localStorage ? localStorage.getItem(LAST_LOGIN) : "";
 const lastLogin = ll ? moment(JSON.parse(ll)) : nowLogin;
 
 if (!ll) {

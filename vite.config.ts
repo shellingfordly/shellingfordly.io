@@ -8,7 +8,7 @@ import Markdown from "vite-plugin-md";
 import matter from "gray-matter";
 import Prism from "markdown-it-prism";
 import anchor from "markdown-it-anchor";
-import { slugify } from "./sctipts/slugify";
+import { slugify } from "./scripts/slugify";
 import TOC from "markdown-it-table-of-contents";
 import LinkAttributes from "markdown-it-link-attributes";
 

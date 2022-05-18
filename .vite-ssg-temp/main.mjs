@@ -47,13 +47,13 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   setup(__props) {
     let nowLogin = moment();
-    const ll = localStorage.getItem(LAST_LOGIN);
+    const ll = typeof window !== void 0 ? localStorage.getItem(LAST_LOGIN) : "";
     const lastLogin = ll ? moment(JSON.parse(ll)) : nowLogin;
     if (!ll) {
       localStorage.setItem(LAST_LOGIN, JSON.stringify(nowLogin));
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-2ce68368><p data-v-2ce68368>Last Login: ${ssrInterpolate(unref(lastLogin))}</p><p data-v-2ce68368> The old version of the Blog: <a class="old-blog" href="https://shellingfordly.gitee.io/" target="_blank" data-v-2ce68368> shellingfordly </a></p></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-11928aa3><p data-v-11928aa3>Last Login: ${ssrInterpolate(unref(lastLogin))}</p><p data-v-11928aa3> The old version of the Blog: <a class="old-blog" href="https://shellingfordly.gitee.io/" target="_blank" data-v-11928aa3> shellingfordly </a></p></div>`);
     };
   }
 });
@@ -63,7 +63,7 @@ _sfc_main$t.setup = (props2, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/layout/Header.vue");
   return _sfc_setup$t ? _sfc_setup$t(props2, ctx) : void 0;
 };
-var Header = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-2ce68368"]]);
+var Header = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-11928aa3"]]);
 const _sfc_main$s = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   setup(__props) {
