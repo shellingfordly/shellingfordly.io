@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { LAST_LOGIN } from "@/contants";
-import * as moment from "moment";
+import moment from "moment";
 
 let nowLogin = moment();
 const ll = localStorage.getItem(LAST_LOGIN);

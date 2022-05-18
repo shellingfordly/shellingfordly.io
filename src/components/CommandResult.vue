@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ResultType } from "@/enum";
 import { RouteMap } from "@/types";
-import * as moment from "moment";
+import moment from "moment";
 import { PropType } from "vue";
 
 const props = defineProps({

@@ -1,7 +1,9 @@
 import { ResultType, FileType } from "@/enum";
 import { RouteMap } from "@/types";
-import { cloneDeep } from "lodash";
+// import { cloneDeep } from "lodash";
+import pkg from "lodash";
 import { RouteRecordNormalized } from "vue-router";
+const { cloneDeep } = pkg;
 
 export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
