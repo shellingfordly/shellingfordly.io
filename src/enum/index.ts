@@ -9,6 +9,7 @@ export enum ResultType {
   Page,
   Error,
   Help,
+  Empty,
 }
 
 export enum ErrorType {

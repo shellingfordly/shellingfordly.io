@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-import Command from "@/components/Command.vue";
-import CommandResult from "@/components/CommandResult.vue";
-import CommandError from "@/components/CommandError.vue";
 import { useCommand } from "@/hooks/useCommand";
 import { ResultType } from "@/enum";
 import { useStore } from "@/store";
+import { helpCommand } from "@/contants";
 
 const router = useRouter();
 const store = useStore();
@@ -25,6 +23,8 @@ function onEnter(value: string) {
 
 <template>
   <div class="layout">
+    <Command value="help" />
+    <CommandResult :type="ResultType.Help" :content="helpCommand" />
     <Command value="ll" />
     <CommandResult :content="store.routeMap" />
     <Command @on-enter="onEnter" />

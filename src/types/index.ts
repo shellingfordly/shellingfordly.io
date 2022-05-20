@@ -5,7 +5,7 @@ export interface CommandModel {
   value: string;
   errorType?: ErrorType;
   errorValue?: string;
-  content?: Partial<RouteItem>;
+  content?: RouteItem | RouteItem[] | RouteMap;
 }
 
 export interface RouteItem {
@@ -19,6 +19,7 @@ export interface RouteItem {
   author: string;
   tag: string;
   children?: RouteMap;
+  index?: number;
 }
 
 export type RouteMap = Record<string, RouteItem>;

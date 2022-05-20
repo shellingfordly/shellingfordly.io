@@ -2,8 +2,11 @@ export const RootRoute = "~";
 
 export const LastRoute = "../";
 
+export const ALL = "-a";
+
 export const helpCommand = {
   ll: "查看当前目录",
+  "ll -a": "查看所有文章",
   cat: "查看文章内容",
   cd: "跳转目录",
 };

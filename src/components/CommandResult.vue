@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { ResultType } from "@/enum";
-import { RouteMap } from "@/types";
+import { FileType, ResultType } from "@/enum";
+import { RouteItem, RouteMap } from "@/types";
 import moment from "moment";
 import { PropType } from "vue";
 
 const props = defineProps({
   content: {
-    type: Object as PropType<RouteMap>,
+    type: Object as PropType<RouteMap | Record<string, string>>,
   },
   type: {
     type: Number as PropType<ResultType>,
@@ -15,6 +15,12 @@ const props = defineProps({
 });
 
 const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
+const titleClass = (type: FileType) => [
+  "title",
+  type === FileType.Page && "link-text",
+];
+
+const sort = (list: any[]) => list.sort((a, b) => a.index - b.index);
 
 const list = computed(() => {
   if (!props.content) {
@@ -26,16 +32,15 @@ const list = computed(() => {
   }
 
   if (props.content.type === undefined) {
-    return Object.values(props.content);
+    return sort(Object.values(props.content));
   } else {
-    return Object.values(props.content.children);
+    return sort(Object.values(props.content.children));
   }
 });
 
 const router = useRouter();
-
-function go(path: string) {
-  router.push(path);
+function go(item: RouteItem) {
+  item.fileType === FileType.Page && router.push(item.path);
 }
 </script>
 
@@ -44,15 +49,17 @@ function go(path: string) {
     <ul class="list">
       <li class="item" v-for="(item, index) in list">
         <template v-if="type === ResultType.Route">
-          <span>{{ item.fileType }}</span>
+          <span class="file-type">{{ item.fileType }}</span>
           <span>{{ index + 1 }}</span>
-          <span>{{ item.author }}</span>
-          <span>{{ item.tag }}</span>
+          <!-- <span>{{ item.author }}</span> -->
+          <!-- <span>{{ item.tag }}</span> -->
           <span>{{ deteFormat(item.date) }}</span>
-          <span class="title">{{ item.name }}</span>
+          <span :class="titleClass(item.fileType)" @click="go(item)">
+            {{ item.name }}
+          </span>
         </template>
         <template v-else-if="type === ResultType.Help">
-          <span>{{ item[0] }}:</span>
+          <span class="command">{{ item[0] }}:</span>
           <span>{{ item[1] }}</span>
         </template>
       </li>
@@ -67,20 +74,33 @@ function go(path: string) {
       > span {
         display: inline-block;
         margin-right: 30px;
-      }
-
-      > span:first-child {
-        width: 135px;
-      }
-
-      @media screen and (max-width: 720px) {
-        > span {
+        @media screen and (max-width: 720px) {
           margin-right: 10px;
+        }
+      }
+
+      .file-type {
+        width: 135px;
+
+        @media screen and (max-width: 720px) {
+          width: 80px;
         }
       }
 
       .title {
         color: @linkText;
+      }
+
+      .link-text {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .command {
+        width: 60px;
       }
     }
   }

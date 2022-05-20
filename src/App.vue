@@ -1,8 +1,17 @@
 <script lang="ts" setup>
-import Header from "./layout/Header.vue";
+const route = useRoute();
+const contentClass = computed(() => (route.path !== "/" ? "content" : ""));
 </script>
 
 <template>
   <Header />
-  <router-view />
+  <div :class="contentClass">
+    <router-view />
+  </div>
 </template>
+
+<style>
+.content {
+  padding-top: 20px;
+}
+</style>

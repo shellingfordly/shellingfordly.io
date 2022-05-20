@@ -1,9 +1,8 @@
 import { ResultType, FileType } from "@/enum";
 import { RouteMap } from "@/types";
-// import { cloneDeep } from "lodash";
-import pkg from "lodash";
+import lodash from "lodash";
 import { RouteRecordNormalized } from "vue-router";
-const { cloneDeep } = pkg;
+const { cloneDeep } = lodash;
 
 export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
@@ -77,10 +76,16 @@ function createRouteItem(
 }
 
 export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
-  let routeMap = cloneDeep(getBaseRouteMap(baseRoute));
+  let routeMap: RouteMap = cloneDeep(getBaseRouteMap(baseRoute));
   const allRoutes: RouteMap = {};
+  const sortMap: Record<string, number> = {};
+
+  Object.keys(routeMap)
+    .sort()
+    .forEach((key, i) => (sortMap[key] = i + 1));
 
   Object.values(routeMap).forEach((route) => {
+    route.index = sortMap[route.name];
     if (!route.parent) {
       route.children = {};
       allRoutes[route.name] = route;
@@ -96,7 +101,11 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
       }
     }
   });
-
+  routeMap.index.name = "首页";
+  routeMap.index.index = 0;
   routeMap = undefined;
+
+  // route.
+
   return allRoutes;
 }

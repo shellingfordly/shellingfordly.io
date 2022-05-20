@@ -1,83 +1,42 @@
-import { helpCommand, LastRoute, RootRoute } from "@/contants";
-import { ResultType, ErrorType, CommandType } from "@/enum";
+import { ErrorType, CommandType } from "@/enum";
 import { useStore } from "@/store";
-import { CommandModel, HistoryModel, RouteItem, RouteMap } from "@/types";
+import { HistoryModel, RouteItem, RouteMap } from "@/types";
+import {
+  createCdCommand,
+  createCatCommand,
+  createHelpCommand,
+  createLlCommand,
+} from "@/utils/createCommand";
+import { handleEmpty, handleError } from "@/utils/handle";
 
 // 指令内容缓存
 export const history = reactive<HistoryModel>({
   routes: [],
   path: "",
 });
-
 const commandMap = {
-  cd(routerMap, value: string) {
-    if (value === undefined || value === RootRoute) {
-      history.routes = [];
-      return handleRoute("");
-    }
-
-    let route: RouteItem;
-
-    if (value === LastRoute) {
-      history.routes.pop();
-      value = "";
-      route = getHistoryRoute() as RouteItem;
-    } else {
-      route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
-    }
-
-    if (route && route.type === ResultType.Route) {
-      history.routes.push(route as RouteItem);
-      history.path = value;
-      return handleRoute(value);
-    } else {
-      return handleError({
-        errorType: ErrorType.NotRoute,
-        value: history.path,
-        errorValue: value,
-      });
-    }
-  },
-  cat(routerMap, value: string) {
-    const route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
-
-    if (!route) {
-      return handleError({
-        errorType: ErrorType.NotPage,
-        value: history.path,
-        errorValue: value,
-      });
-    } else {
-      if (route.type === ResultType.Page) {
-        return {
-          type: ResultType.Page,
-          content: route,
-          value,
-        };
-      }
-    }
-  },
-  ll(routerMap, value: string) {
-    const route = getHistoryRoute() || routerMap;
-    return handleRoute(value, route);
-  },
-  help(routerMap, value: string) {
-    return {
-      type: ResultType.Help,
-      content: helpCommand,
-      value,
-    };
-  },
+  cd: createCdCommand(),
+  cat: createCatCommand(),
+  ll: createLlCommand(),
+  help: createHelpCommand(),
 };
 
 export function useCommand() {
   const store = useStore();
 
+  onUnmounted(() => {
+    history.routes = [];
+    history.path = "";
+  });
+
   return (comStr: string) => {
     const { command, value } = parseCommandString(comStr);
     const handleCommand = commandMap[command];
+    if (!command) {
+      return handleEmpty();
+    }
     if (!!handleCommand) {
-      return handleCommand(store.routeMap, value);
+      return handleCommand(store.routeMap, value, store.allRoutes);
     } else {
       return handleError({
         errorType: ErrorType.Command,
@@ -100,34 +59,10 @@ function parseCommandString(comStr: string) {
   };
 }
 
-function handleRoute(
-  value: string,
-  content: Partial<RouteItem> = {}
-): CommandModel {
-  return {
-    type: ResultType.Route,
-    content,
-    value,
-  };
-}
-
-function handleError({
-  errorType,
-  errorValue,
-  value = "",
-}: Partial<CommandModel>): CommandModel {
-  return {
-    type: ResultType.Error,
-    errorValue,
-    errorType,
-    value,
-  };
-}
-
 export function getHistoryRoute(
   type?: CommandType,
   key?: string
-): RouteItem | RouteMap | null {
+): RouteItem | RouteItem[] | RouteMap | null {
   const len = history.routes.length;
   const route = len ? history.routes[len - 1] : null;
   if (!route) return null;
