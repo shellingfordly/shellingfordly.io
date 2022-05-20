@@ -1,9 +1,7 @@
 ---
-sidebar: auto
-categories:
-  - frame
-  - vue
-  - vue2
+title: Vue2 学习笔记
+date: 2022-04-26 4:02:59
+tag: interview
 ---
 
 # Vue2 学习笔记
