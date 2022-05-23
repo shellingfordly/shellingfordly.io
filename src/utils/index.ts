@@ -69,7 +69,7 @@ function createRouteItem(
     parent,
     title: other.title || "",
     fileType,
-    date: other.date || new Date(),
+    date: other.date || new Date("2022-05-10"),
     author: other.author || "shellingfordly",
     tag: other.tag || "unknown",
   };

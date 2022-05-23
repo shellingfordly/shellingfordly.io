@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
     CommandError: typeof import('./src/components/CommandError.vue')['default']
     CommandResult: typeof import('./src/components/CommandResult.vue')['default']
     Header: typeof import('./src/components/layout/Header.vue')['default']
-    Help: typeof import('./src/components/Help.vue')['default']
     Layout: typeof import('./src/components/layout/Layout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
