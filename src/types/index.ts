@@ -9,11 +9,11 @@ export interface CommandModel {
 }
 
 export interface RouteItem {
+  key: string;
   name: string;
   path: string;
   type: ResultType;
   parent: string;
-  title: string;
   fileType: string;
   date: string;
   author: string;

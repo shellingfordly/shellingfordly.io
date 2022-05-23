@@ -21,6 +21,7 @@ export function createCdCommand() {
     } else {
       route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
     }
+    console.log("cd", value, routerMap, routerMap[value]);
 
     if (route && route.type === ResultType.Route) {
       history.routes.push(route as RouteItem);

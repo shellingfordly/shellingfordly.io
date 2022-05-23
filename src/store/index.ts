@@ -18,7 +18,11 @@ export const useStore = defineStore("appStore", {
   },
   actions: {
     setRouteMap(baseRoutes: RouteRecordNormalized[]) {
-      const _baseRoutes = baseRoutes.filter((v) => !v.path.includes(".html"));
+      const _baseRoutes = baseRoutes.filter((v) => {
+        return !v.path.includes(".html") && !String(v.name).includes("all");
+      });
+      console.log("_baseRoutes", _baseRoutes);
+
       this.routeMap = getRouteMap(_baseRoutes);
       this.allRoutes = getBaseRouteMap(_baseRoutes);
     },

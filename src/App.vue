@@ -10,8 +10,13 @@ const contentClass = computed(() => (route.path !== "/" ? "content" : ""));
   </div>
 </template>
 
-<style>
+<style lang="less">
 .content {
   padding-top: 20px;
+  width: 70%;
+
+  @media screen and (max-width: 720px) {
+    width: 100%;
+  }
 }
 </style>

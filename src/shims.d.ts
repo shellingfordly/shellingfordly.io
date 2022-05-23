@@ -7,3 +7,5 @@ declare module "*.vue" {
 declare module "moment";
 
 declare module "lodash";
+
+declare module "nprogress";

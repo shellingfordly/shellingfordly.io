@@ -8,10 +8,12 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
 
   Object.values(baseRoute).forEach((route) => {
-    const name = route.name as string;
-    if (!name.includes("-")) {
-      routeMap[name] = createRouteItem(
-        name,
+    const key = route.name as string;
+    const other: any = route.meta.frontmatter;
+    if (!key.includes("-")) {
+      routeMap[key] = createRouteItem(
+        key,
+        other.name,
         route.path,
         ResultType.Page,
         "",
@@ -19,26 +21,29 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
         route.meta.frontmatter
       );
     } else {
-      handleRouteName(name, route);
+      handleRouteName(key, route);
     }
   });
 
   function handleRouteName(
-    nameStr: string,
+    routeName: string,
     route: RouteRecordNormalized,
     parent: string = ""
   ) {
-    const index = nameStr.indexOf("-");
-    const name = index !== -1 ? nameStr.slice(0, index).trim() : nameStr.trim();
-    const childName = index !== -1 ? nameStr.slice(index + 1).trim() : "";
+    const index = routeName.indexOf("-");
+    const key =
+      index !== -1 ? routeName.slice(0, index).trim() : routeName.trim();
+    const childName = index !== -1 ? routeName.slice(index + 1).trim() : "";
     const type = !!childName ? ResultType.Route : ResultType.Page;
-    if (!name) return;
+    const other: any = route.meta.frontmatter;
+    if (!key) return;
 
-    if (routeMap[name]) {
-      handleRouteName(childName, route, name);
+    if (routeMap[key]) {
+      handleRouteName(childName, route, key);
     } else {
-      routeMap[name] = createRouteItem(
-        name,
+      routeMap[key] = createRouteItem(
+        routeName,
+        other.name,
         route.path,
         type,
         parent,
@@ -46,15 +51,15 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
         route.meta.frontmatter
       );
       if (childName) {
-        handleRouteName(childName, route, name);
+        handleRouteName(childName, route, key);
       }
     }
   }
-
   return routeMap;
 }
 
 function createRouteItem(
+  key: string,
   name: string,
   path: string,
   type: ResultType,
@@ -63,11 +68,11 @@ function createRouteItem(
   other: any
 ) {
   return {
+    key,
     name,
     path,
     type,
     parent,
-    title: other.title || "",
     fileType,
     date: other.date || new Date("2022-05-10"),
     author: other.author || "shellingfordly",
@@ -79,33 +84,31 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
   let routeMap: RouteMap = cloneDeep(getBaseRouteMap(baseRoute));
   const allRoutes: RouteMap = {};
   const sortMap: Record<string, number> = {};
+  console.log("routeMap", routeMap);
 
   Object.keys(routeMap)
     .sort()
     .forEach((key, i) => (sortMap[key] = i + 1));
 
   Object.values(routeMap).forEach((route) => {
-    route.index = sortMap[route.name];
+    route.index = sortMap[route.key];
     if (!route.parent) {
       route.children = {};
-      allRoutes[route.name] = route;
+      allRoutes[route.key] = route;
     } else {
       const parent = routeMap[route.parent];
 
       if (parent.children) {
-        parent.children[route.name] = route;
+        parent.children[route.key] = route;
       } else {
         parent.children = {
-          [route.name]: route,
+          [route.key]: route,
         };
       }
     }
   });
-  routeMap.index.name = "首页";
   routeMap.index.index = 0;
   routeMap = undefined;
-
-  // route.
 
   return allRoutes;
 }
