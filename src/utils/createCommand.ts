@@ -79,3 +79,15 @@ export function createHelpCommand() {
     };
   };
 }
+
+export function createFindCommand() {
+  return (_, value: string, allRoutes: RouteMap) => {
+    const content = Object.values(allRoutes).filter(
+      (v) => v.name.includes(value) && v.fileType == FileType.Page
+    );
+    if (!content.length) {
+      return handleError({ errorType: ErrorType.NotFind, errorValue: value });
+    }
+    return handleRoute("", content);
+  };
+}

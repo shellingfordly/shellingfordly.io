@@ -21,6 +21,8 @@ const errorMessage = computed(() => {
       return `cat: not a article: ${value}`;
     case ErrorType.NotFindRouteOrPage:
       return `cd: no such file or directory: ${value}`;
+    case ErrorType.NotFind:
+      return `find: no find article: ${value}`;
     default:
       return `Unknown command: ${value}`;
   }

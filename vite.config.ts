@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import AutoImport from "unplugin-auto-import/vite";
+import Inspect from "vite-plugin-inspect";
 import Pages from "vite-plugin-pages";
 import fs from "fs";
 import Markdown from "vite-plugin-md";
@@ -11,6 +12,8 @@ import anchor from "markdown-it-anchor";
 import { slugify } from "./scripts/slugify";
 import TOC from "markdown-it-table-of-contents";
 import LinkAttributes from "markdown-it-link-attributes";
+import Components from "unplugin-vue-components/vite";
+import IconsResolver from "unplugin-icons/resolver";
 
 import "prismjs/components/prism-regex";
 import "prismjs/components/prism-javascript";
@@ -106,5 +109,18 @@ export default defineConfig({
       ],
       dts: "src/auto-imports.d.ts",
     }),
+
+    Components({
+      extensions: ["vue", "md"],
+      dts: true,
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      resolvers: [
+        IconsResolver({
+          componentPrefix: "",
+        }),
+      ],
+    }),
+
+    Inspect(),
   ],
 });

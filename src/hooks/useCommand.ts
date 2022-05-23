@@ -6,6 +6,7 @@ import {
   createCatCommand,
   createHelpCommand,
   createLlCommand,
+  createFindCommand,
 } from "@/utils/createCommand";
 import { handleEmpty, handleError } from "@/utils/handle";
 
@@ -19,6 +20,7 @@ const commandMap = {
   cat: createCatCommand(),
   ll: createLlCommand(),
   help: createHelpCommand(),
+  find: createFindCommand(),
 };
 
 export function useCommand() {

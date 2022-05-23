@@ -19,6 +19,7 @@ export enum ErrorType {
   NotRoute,
   NotPage,
   NotFindRouteOrPage,
+  NotFind,
 }
 
 export enum FileType {

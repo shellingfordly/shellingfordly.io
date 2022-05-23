@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
+    "dist": "node ./build/build.js",
     "build": "npm run static && cross-env NODE_ENV=production vite build && esno ./scripts/rss.ts",
     "static": "rimraf temp"
   },
@@ -33,7 +34,10 @@
     "prismjs": "^1.28.0",
     "rimraf": "^3.0.2",
     "unplugin-auto-import": "^0.7.1",
+    "unplugin-icons": "^0.14.3",
+    "unplugin-vue-components": "^0.19.5",
     "vite": "^2.9.8",
+    "vite-plugin-inspect": "^0.5.0",
     "vite-plugin-md": "^0.13.1",
     "vite-plugin-pages": "^0.23.0",
     "vite-ssg": "^0.20.0"

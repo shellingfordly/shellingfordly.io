@@ -9,6 +9,7 @@ export const helpCommand = {
   "ll -a": "查看所有文章",
   cat: "查看文章内容",
   cd: "跳转目录",
+  find: "查询文章",
 };
 
 export const LAST_LOGIN = "LAST_LOGIN";
