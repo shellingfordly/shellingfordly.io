@@ -26,7 +26,7 @@ onMounted(async () => {
   const route = getHistoryRoute();
 
   if ((props.type === ResultType.Route && props.path) || route) {
-    path.value = props.path || (route.name as string) || RootRoute;
+    path.value = props.path || (route.key as string) || RootRoute;
   }
 });
 

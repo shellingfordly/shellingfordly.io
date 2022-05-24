@@ -51,9 +51,8 @@ function go(item: RouteItem) {
         <template v-if="type === ResultType.Route">
           <span class="file-type">{{ item.fileType }}</span>
           <span>{{ index + 1 }}</span>
-          <!-- <span>{{ item.author }}</span> -->
-          <!-- <span>{{ item.tag }}</span> -->
           <span>{{ deteFormat(item.date) }}</span>
+          <span>{{ item.key }}</span>
           <span :class="titleClass(item.fileType)" @click="go(item)">
             {{ item.name }}
           </span>

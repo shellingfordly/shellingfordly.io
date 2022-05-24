@@ -13,7 +13,7 @@ export interface RouteItem {
   name: string;
   path: string;
   type: ResultType;
-  parent: string;
+  parent: string | null;
   fileType: string;
   date: string;
   author: string;

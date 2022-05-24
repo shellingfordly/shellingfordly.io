@@ -1,3 +1,4 @@
+import { AUTHOR, DEFAULT_TIME, UNKNOWN } from "@/contants";
 import { ResultType, FileType } from "@/enum";
 import { RouteMap } from "@/types";
 import lodash from "lodash";
@@ -6,77 +7,63 @@ const { cloneDeep } = lodash;
 
 export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
+  const isNotPage = (route: RouteRecordNormalized) => {
+    const other: any = route.meta.frontmatter;
+    return route.path.match(/\//g).length > 1 || other.notPage;
+  };
 
   Object.values(baseRoute).forEach((route) => {
-    const key = route.name as string;
-    const other: any = route.meta.frontmatter;
-    if (!key.includes("-")) {
-      routeMap[key] = createRouteItem(
-        key,
-        other.name,
-        route.path,
-        ResultType.Page,
-        "",
-        FileType.Page,
-        route.meta.frontmatter
-      );
+    if (isNotPage(route)) {
+      handleRoute(route);
     } else {
-      handleRouteName(key, route);
+      routeMap[route.name as string] = createRouteItem({
+        path: route.path,
+        other: route.meta.frontmatter,
+        key: route.name,
+        type: ResultType.Page,
+        fileType: FileType.Page,
+        parent: null,
+      });
     }
   });
 
-  function handleRouteName(
-    routeName: string,
-    route: RouteRecordNormalized,
-    parent: string = ""
-  ) {
-    const index = routeName.indexOf("-");
-    const key =
-      index !== -1 ? routeName.slice(0, index).trim() : routeName.trim();
-    const childName = index !== -1 ? routeName.slice(index + 1).trim() : "";
-    const type = !!childName ? ResultType.Route : ResultType.Page;
+  function handleRoute(route: RouteRecordNormalized) {
+    const { path } = route;
     const other: any = route.meta.frontmatter;
-    if (!key) return;
+    const pathList = path.slice(1).split("/");
 
-    if (routeMap[key]) {
-      handleRouteName(childName, route, key);
-    } else {
-      routeMap[key] = createRouteItem(
-        routeName,
-        other.name,
-        route.path,
+    const len = pathList.length;
+    for (let i = 0; i < pathList.length; i++) {
+      const key = pathList[i];
+      const isPage = i === len - 1 && !other.notPage;
+      let fileType = isPage ? FileType.Page : FileType.Route;
+      let type = isPage ? ResultType.Page : ResultType.Route;
+      let parent = i > 0 ? pathList[i - 1] : null;
+
+      routeMap[key] = createRouteItem({
+        path,
+        other,
+        key,
         type,
         parent,
-        childName ? FileType.Route : FileType.Page,
-        route.meta.frontmatter
-      );
-      if (childName) {
-        handleRouteName(childName, route, key);
-      }
+        fileType,
+      });
     }
   }
   return routeMap;
 }
 
-function createRouteItem(
-  key: string,
-  name: string,
-  path: string,
-  type: ResultType,
-  parent: string,
-  fileType,
-  other: any
-) {
+function createRouteItem({ path, other, type, key, fileType, parent }) {
   return {
     key,
-    name,
+    name: other.name,
     path,
     type,
     parent,
     fileType,
-    date: other.date || new Date("2022-05-10"),
-    author: other.author || "shellingfordly",
-    tag: other.tag || "unknown",
+    date: other.date || new Date(DEFAULT_TIME),
+    author: other.author || AUTHOR,
+    tag: other.tag || UNKNOWN,
   };
 }
 
@@ -84,7 +71,6 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
   let routeMap: RouteMap = cloneDeep(getBaseRouteMap(baseRoute));
   const allRoutes: RouteMap = {};
   const sortMap: Record<string, number> = {};
-  console.log("routeMap", routeMap);
 
   Object.keys(routeMap)
     .sort()
@@ -93,7 +79,6 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
   Object.values(routeMap).forEach((route) => {
     route.index = sortMap[route.key];
     if (!route.parent) {
-      route.children = {};
       allRoutes[route.key] = route;
     } else {
       const parent = routeMap[route.parent];
@@ -109,6 +94,7 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
   });
   routeMap.index.index = 0;
   routeMap = undefined;
+  console.log("routeMap", allRoutes);
 
   return allRoutes;
 }

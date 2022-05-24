@@ -64,7 +64,7 @@ function parseCommandString(comStr: string) {
 export function getHistoryRoute(
   type?: CommandType,
   key?: string
-): RouteItem | RouteItem[] | RouteMap | null {
+): RouteItem | RouteMap | null {
   const len = history.routes.length;
   const route = len ? history.routes[len - 1] : null;
   if (!route) return null;
