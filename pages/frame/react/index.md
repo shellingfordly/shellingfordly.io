@@ -1,4 +1,4 @@
 ---
-name: 框架
+name: React
 notPage: true
 ---

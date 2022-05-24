@@ -1,4 +1,4 @@
 ---
-name: 框架
+name: Three.js
 notPage: true
 ---
