@@ -2,7 +2,7 @@ import { ResultType, ErrorType } from "@/enum";
 
 export interface CommandModel {
   type: ResultType;
-  value: string;
+  value?: string;
   errorType?: ErrorType;
   errorValue?: string;
   content?: RouteItem | RouteItem[] | RouteMap;

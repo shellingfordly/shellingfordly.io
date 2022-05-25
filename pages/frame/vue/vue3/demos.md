@@ -1,5 +1,6 @@
 ---
 name: 对新特性的实际应用demo
+date: 2021-11-30
 categories:
   - frame
   - vue

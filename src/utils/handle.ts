@@ -1,16 +1,16 @@
 import { ResultType } from "@/enum";
-import { CommandModel, RouteItem, RouteMap } from "@/types";
+import { CommandModel } from "@/types";
 
-export function handleEmpty() {
+export function handleEmpty(): CommandModel {
   return {
     type: ResultType.Empty,
   };
 }
 
-export function handleRoute(
-  value: string,
-  content?: RouteItem[] | RouteItem | RouteMap
-): CommandModel {
+export function handleRoute({
+  value = "",
+  content,
+}: Partial<CommandModel> = {}): CommandModel {
   return {
     type: ResultType.Route,
     content,

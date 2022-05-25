@@ -94,7 +94,6 @@ export function getRouteMap(baseRoute: RouteRecordNormalized[]) {
   });
   routeMap.index.index = 0;
   routeMap = undefined;
-  console.log("routeMap", allRoutes);
 
   return allRoutes;
 }

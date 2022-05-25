@@ -4,29 +4,33 @@ import { getHistoryRoute, history } from "@/hooks/useCommand";
 import { RouteItem, RouteMap } from "@/types";
 import { handleRoute, handleEmpty, handleError } from "./handle";
 
+function handlePaths(paths: string, callback) {
+  paths.split("/").forEach(callback);
+}
+
 export function createCdCommand() {
   return (routerMap, value: string) => {
+    // 跟路径
     if (value === undefined || value === RootRoute) {
       history.routes = [];
-      return handleRoute("");
+      return handleRoute();
     }
-
-    let route: RouteItem;
-
+    // 返回上一级
     if (value === LastRoute) {
       history.routes.pop();
-      value = "";
-      route = getHistoryRoute() as RouteItem;
       return handleEmpty();
-    } else {
-      route = getHistoryRoute(CommandType.CD, value) || routerMap[value];
     }
-    console.log("cd", value, routerMap, routerMap[value]);
 
-    if (route && route.type === ResultType.Route) {
-      history.routes.push(route as RouteItem);
-      history.path = value;
-      return handleRoute(value);
+    handlePaths(value, (path) => {
+      const route = getHistoryRoute(CommandType.CD, path) || routerMap[path];
+      if (route && route.type === ResultType.Route) {
+        history.routes.push(route as RouteItem);
+        history.path = path;
+      }
+    });
+
+    if (history.path) {
+      return handleRoute({ value: history.path });
     } else {
       return handleError({
         errorType: ErrorType.NotRoute,
@@ -38,33 +42,44 @@ export function createCdCommand() {
 }
 export function createLlCommand() {
   return (routerMap, value: string, allRoutes: RouteMap) => {
+    let content;
+    let _value = "";
+
     if (value === ALL) {
-      const content = Object.values(allRoutes).filter(
+      content = Object.values(allRoutes).filter(
         (v) => v.fileType === FileType.Page
       );
-      return handleRoute("", content);
+    } else {
+      content = getHistoryRoute() || routerMap;
+      if (value) {
+        handlePaths(value, (path) => {
+          content = content[path] || content.children[path];
+        });
+      }
     }
-    const content = getHistoryRoute() || routerMap;
-    return handleRoute(value, content);
+
+    return handleRoute({ value: _value, content });
   };
 }
 
 export function createCatCommand() {
   return (routerMap, value: string) => {
-    const route = getHistoryRoute(CommandType.CAT, value) || routerMap[value];
-    let errorType = ErrorType.NotPage;
-    if (!route) errorType = ErrorType.Page;
+    let content = getHistoryRoute(CommandType.CAT) || routerMap;
 
-    if (route && route.type === ResultType.Page) {
+    handlePaths(value, (path) => {
+      content = content[path] || content.children[path];
+    });
+
+    if (content && content.type === ResultType.Page) {
       return {
         type: ResultType.Page,
-        content: route,
+        content,
         value,
       };
     }
 
     return handleError({
-      errorType,
+      errorType: content ? ErrorType.NotPage : ErrorType.Page,
       value: history.path,
       errorValue: value,
     });
@@ -84,11 +99,13 @@ export function createHelpCommand() {
 export function createFindCommand() {
   return (_, value: string, allRoutes: RouteMap) => {
     const content = Object.values(allRoutes).filter(
-      (v) => v.name.includes(value) && v.fileType == FileType.Page
+      (v) =>
+        (v.name.includes(value) || v.path.includes(value)) &&
+        v.fileType == FileType.Page
     );
     if (!content.length) {
       return handleError({ errorType: ErrorType.NotFind, errorValue: value });
     }
-    return handleRoute("", content);
+    return handleRoute({ content });
   };
 }
