@@ -8,7 +8,7 @@ import {
   createLlCommand,
   createFindCommand,
 } from "@/utils/createCommand";
-import { handleEmpty, handleError } from "@/utils/handle";
+import { handleEmpty, handleError } from "@/utils/handleResult";
 
 // 指令内容缓存
 export const history = reactive<HistoryModel>({

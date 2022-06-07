@@ -2,7 +2,7 @@ import { LastRoute, RootRoute, ALL, helpCommand } from "@/contants";
 import { CommandType, ErrorType, FileType, ResultType } from "@/enum";
 import { getHistoryRoute, history } from "@/hooks/useCommand";
 import { RouteItem, RouteMap } from "@/types";
-import { handleRoute, handleEmpty, handleError } from "./handle";
+import { handleRoute, handleEmpty, handleError } from "./handleResult";
 
 function handlePaths(paths: string, callback) {
   paths.split("/").forEach(callback);
