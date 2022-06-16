@@ -109,3 +109,47 @@ export function createFindCommand() {
     return handleRoute({ content });
   };
 }
+
+export function createOpenCommand() {
+  function handleValue(value: string) {
+    let url = "https://";
+    if (value.includes("www")) {
+      url += value;
+    } else {
+      url += "www." + value;
+    }
+    if (!value.includes(".com")) {
+      url += ".com";
+    }
+    window.open(url);
+  }
+
+  return (_, value: string) => {
+    if (value) handleValue(value);
+    return handleRoute();
+  };
+}
+
+export function createSearchCommand() {
+  class SearchType {
+    baidu = "https://www.baidu.com/s?wd=";
+    google = "https://www.google.com/search?q=";
+    b = this.baidu;
+    g = this.google;
+  }
+  function handleValue(value: string) {
+    const [_, searchKey] = value.split(":");
+    const map = new SearchType();
+    Object.keys(map).forEach((key) => {
+      if (value.includes(key)) {
+        const url = map[key] + searchKey;
+        window.open(url);
+      }
+    });
+  }
+
+  return (_, value: string) => {
+    if (value) handleValue(value);
+    return handleRoute();
+  };
+}
