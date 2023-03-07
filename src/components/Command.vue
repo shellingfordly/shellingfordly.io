@@ -18,6 +18,7 @@ const path = ref(RootRoute);
 let history = getCommandHistory();
 let index = history.length;
 
+
 onMounted(async () => {
   if (searchRef.value) {
     searchRef.value.focus();
@@ -26,7 +27,7 @@ onMounted(async () => {
   const route = getHistoryRoute();
 
   if ((props.type === ResultType.Route && props.path) || route) {
-    path.value = props.path || (route.key as string) || RootRoute;
+    path.value = props.path || (route?.key as string) || RootRoute;
   }
 });
 

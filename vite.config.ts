@@ -7,25 +7,14 @@ import Pages from "vite-plugin-pages";
 import fs from "fs";
 import Markdown from "vite-plugin-md";
 import matter from "gray-matter";
-import Prism from "markdown-it-prism";
 import anchor from "markdown-it-anchor";
 import { slugify } from "./scripts/slugify";
+import Shiki from 'markdown-it-shiki'
+// @ts-expect-error missing types
 import TOC from "markdown-it-table-of-contents";
 import LinkAttributes from "markdown-it-link-attributes";
 import Components from "unplugin-vue-components/vite";
 import IconsResolver from "unplugin-icons/resolver";
-
-import "prismjs/components/prism-regex";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-xml-doc";
-import "prismjs/components/prism-yaml";
-import "prismjs/components/prism-json";
-import "prismjs/components/prism-markdown";
-import "prismjs/components/prism-java";
-import "prismjs/components/prism-javadoclike";
-import "prismjs/components/prism-javadoc";
-import "prismjs/components/prism-jsdoc";
 
 export default defineConfig({
   server: {
@@ -74,7 +63,13 @@ export default defineConfig({
         quotes: "\"\"''",
       },
       markdownItSetup(md) {
-        md.use(Prism);
+        md.use(Shiki, {
+          theme: {
+            light: 'vitesse-light',
+            dark: 'vitesse-dark',
+          },
+        })
+        
         md.use(anchor, {
           slugify,
           permalink: anchor.permalink.linkInsideHeader({

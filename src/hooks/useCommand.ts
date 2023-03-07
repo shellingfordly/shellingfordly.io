@@ -39,16 +39,14 @@ export function useCommand() {
 
   return (comStr: string) => {
     let { command, value } = parseCommandString(comStr);
-    const cs = command.split(":");
-    command = cs[0];
-    value = `${cs[1]}:${value}`;
-    const handleCommand = commandMap[command];
+
+    const handleCommand = commandMap[command as keyof typeof commandMap];
 
     if (!command) {
       return handleEmpty();
     }
     if (!!handleCommand) {
-      return handleCommand(store.routeMap, value, store.allRoutes);
+      return handleCommand(store.routeMap, value, store.allRoutes as any);
     } else {
       return handleError({
         errorType: ErrorType.Command,
@@ -81,9 +79,9 @@ export function getHistoryRoute(
 
   switch (type) {
     case CommandType.CD:
-      return (key && route.children[key]) || null;
+      return (key && route.children?.[key]) || null;
     case CommandType.LL:
-      return route.children;
+      return route.children || null;
     default:
       return route;
   }
