@@ -11,6 +11,7 @@ export const helpCommand = {
   cat: "查看文章内容(点击文章可直接查看)",
   cd: "跳转目录(ex: cd frame)",
   find: "查询文章",
+  clear: "清空窗口"
 };
 
 export const COMMAND_HISTORY = "COMMAND_HISTORY";

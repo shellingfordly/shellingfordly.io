@@ -19,7 +19,6 @@ const contentClass = computed(() =>
 .content {
   padding-top: 20px;
   width: 70%;
-  margin: auto;
 
   @media screen and (max-width: 720px) {
     width: 100%;

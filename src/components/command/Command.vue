@@ -29,7 +29,6 @@ onMounted(async () => {
     path.value = props.path || (route?.key as string) || RootRoute;
   } else if (props.type === ResultType.Empty) {
     isText.value = false;
-    console.log(1111)
     searchValue.value = "";
     searchRef.value.focus();
   }
