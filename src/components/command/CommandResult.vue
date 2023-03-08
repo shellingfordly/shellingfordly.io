@@ -14,7 +14,7 @@ const props = defineProps({
   },
 });
 
-const deteFormat = (time) => moment(time).format("YYYY/MM/DD");
+const deteFormat = (time: string) => moment(time).format("YYYY/MM/DD");
 const titleClass = (type: FileType) => [
   "title",
   type === FileType.Page && "link-text",

@@ -4,8 +4,3 @@ declare module "*.vue" {
   export default component;
 }
 
-declare module "moment";
-
-declare module "lodash";
-
-declare module "nprogress";

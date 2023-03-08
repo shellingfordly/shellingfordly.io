@@ -1,31 +1,97 @@
-// 滚动条
-body {
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-    background-color: #222;
-  }
-  /*定义滚动条轨道 内阴影+圆角*/
-  &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    background-color: #222;
-  }
-  /*定义滑块 内阴影+圆角*/
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #575757;
-  }
+:root {
+  --c-bg: #fff;
+  --c-text: #555;
+  --c-scrollbar: #eee;
+  --c-scrollbar-hover: #bbb;
+}
+
+html {
+  color: var(--c-text);
+  background-color: var(--c-bg);
+}
+
+html.dark {
+  --c-bg: #050505;
+  --c-text: #bbb;
+  --c-scrollbar: #111;
+  --c-scrollbar-hover: #222;
+}
+
+html {
+  overflow: scroll;
+}
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: #395;
+  opacity: 0.75;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+* {
+  scrollbar-color: var(--c-scrollbar) var(--c-bg);
+}
+
+.sponsorkit-avatar {
+  cursor: pointer;
+}
+.sponsorkit-tier-title {
+  font-weight: 600;
+  font-size: 20px;
+  fill: currentColor;
+}
+.sponsorkit-name {
+  font-weight: 300;
+  font-size: 15px;
+  transform: translateY(8px);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--c-bg);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-scrollbar);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-scrollbar-hover);
+}
+
+h2 + p > em:first-child {
+  opacity: 0.5;
+  display: block;
+  margin-top: -20px;
+  font-size: 0.9em;
+}
+
+.dark [img-light] {
+  display: none;
+}
+
+html:not(.dark) [img-dark] {
+  display: none;
 }
 
 body {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background-color: @bgColor;
-  color: @commonText;
   padding: 10px;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;

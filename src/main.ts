@@ -1,4 +1,3 @@
-// import { createApp } from "vue";
 import App from "./App.vue";
 import "./styles/index.less";
 import autoRoutes from "pages-generated";

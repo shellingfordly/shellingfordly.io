@@ -6,7 +6,7 @@ import MarkdownIt from "markdown-it";
 import type { FeedOptions, Item } from "feed";
 import { Feed } from "feed";
 
-const DOMAIN = "https://antfu.me";
+const DOMAIN = "https://shellingfordly.github.io";
 const AUTHOR = {
   name: "Shellingfordly",
   email: "Shellingfordly@qq.com",
@@ -28,8 +28,8 @@ async function buildBlogRSS() {
   const options = {
     title: "Shellingfordly",
     description: "Shellingfordly' Blog",
-    id: "https://antfu.me/",
-    link: "https://antfu.me/",
+    id: "https://shellingfordly.github.io",
+    link: "https://shellingfordly.github.io",
     copyright: "CC BY-NC-SA 4.0 2021 © Shellingfordly",
   };
   const posts: any[] = (

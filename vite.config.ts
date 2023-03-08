@@ -1,15 +1,15 @@
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
-import { resolve } from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import Inspect from "vite-plugin-inspect";
 import Pages from "vite-plugin-pages";
-import fs from "fs";
-import Markdown from "vite-plugin-md";
+import fs from "fs-extra";
+import Markdown from "vite-plugin-vue-markdown";
 import matter from "gray-matter";
 import anchor from "markdown-it-anchor";
 import { slugify } from "./scripts/slugify";
-import Shiki from 'markdown-it-shiki'
+import Shiki from "markdown-it-shiki";
 // @ts-expect-error missing types
 import TOC from "markdown-it-table-of-contents";
 import LinkAttributes from "markdown-it-link-attributes";
@@ -65,11 +65,11 @@ export default defineConfig({
       markdownItSetup(md) {
         md.use(Shiki, {
           theme: {
-            light: 'vitesse-light',
-            dark: 'vitesse-dark',
+            light: "vitesse-light",
+            dark: "vitesse-dark",
           },
-        })
-        
+        });
+
         md.use(anchor, {
           slugify,
           permalink: anchor.permalink.linkInsideHeader({
@@ -97,7 +97,6 @@ export default defineConfig({
       imports: [
         "vue",
         "vue-router",
-        "vue-i18n",
         "vue/macros",
         "@vueuse/core",
         "@vueuse/head",

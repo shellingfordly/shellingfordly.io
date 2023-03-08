@@ -5,7 +5,7 @@ import { RouteRecordNormalized } from "vue-router";
 
 export interface StoreType {
   routeMap: RouteMap;
-  allRoutes: RouteItem[];
+  allRoutes: RouteItem;
   setRouteMap: () => void;
 }
 
@@ -13,7 +13,7 @@ export const useStore = defineStore("appStore", {
   state() {
     return {
       routeMap: {},
-      allRoutes: [],
+      allRoutes: {},
     };
   },
   actions: {

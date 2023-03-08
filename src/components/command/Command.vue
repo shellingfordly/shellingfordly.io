@@ -18,7 +18,6 @@ const path = ref(RootRoute);
 let history = getCommandHistory();
 let index = history.length;
 
-
 onMounted(async () => {
   if (searchRef.value) {
     searchRef.value.focus();
@@ -98,8 +97,8 @@ function onKeyup(e: any) {
   }
 
   input {
-    background-color: @bgColor;
-    color: @commonText;
+    background-color: var(--c-bg);
+    color: var(--c-text);
     font-size: 22px;
     font-weight: 500;
     max-width: calc(100% - 70px);

@@ -5,9 +5,9 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Command: typeof import('./src/components/Command.vue')['default']
-    CommandError: typeof import('./src/components/CommandError.vue')['default']
-    CommandResult: typeof import('./src/components/CommandResult.vue')['default']
+    Command: typeof import('./src/components/command/Command.vue')['default']
+    CommandError: typeof import('./src/components/command/CommandError.vue')['default']
+    CommandResult: typeof import('./src/components/command/CommandResult.vue')['default']
     Header: typeof import('./src/components/layout/Header.vue')['default']
     Layout: typeof import('./src/components/layout/Layout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

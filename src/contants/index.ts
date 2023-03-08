@@ -12,8 +12,6 @@ export const helpCommand = {
   find: "查询文章",
 };
 
-export const LAST_LOGIN = "LAST_LOGIN";
-
 export const COMMAND_HISTORY = "COMMAND_HISTORY";
 
 export const DEFAULT_TIME = "2022-05-10";
