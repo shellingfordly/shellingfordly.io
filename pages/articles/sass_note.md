@@ -1,9 +1,8 @@
 ---
-name: Sass学习笔记
+name: Sass相关笔记
 date: 2022-02-24 10:56:00
 sidebar: auto
 categories:
-  - frame
   - sass
 ---
 

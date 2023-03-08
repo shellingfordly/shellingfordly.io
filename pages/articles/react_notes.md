@@ -1,8 +1,7 @@
 ---
-name: React学习笔记
+name: React相关笔记
 date: 2022-04-26 16:02:59
 categories:
-  - frame
   - react
 ---
 
@@ -118,6 +117,89 @@ class Son2 extends React.Component{
         <button onClick={this.sendmsg}>点击</button>
     </div>
 }
+```
+
+### 观察者模式
+
+```js
+class EventBus {
+  constructor() {
+    this.bus = document.createElement("fakeelement");
+  }
+
+  addEventListener(event, callback) {
+    this.bus.addEventListener(event, callback);
+  }
+
+  removeEventListener(event, callback) {
+    this.bus.removeEventListener(event, callback);
+  }
+
+  dispatchEvent(event, detail = {}) {
+    this.bus.dispatchEvent(new CustomEvent(event, { detail }));
+  }
+}
+
+export default new EventBus();
+```
+
+- 使用
+
+```js
+import EventBus from './EventBus'
+class ComponentA extends React.Component {
+  componentDidMount() {
+      EventBus.addEventListener('myEvent', this.handleEvent)
+  }
+  componentWillUnmount() {
+      EventBus.removeEventListener('myEvent', this.handleEvent)
+  }
+
+  handleEvent = (e) => {
+      console.log(e.detail.log)  //i'm zach
+  }
+}
+class ComponentB extends React.Component {
+  sendEvent = () => {
+      EventBus.dispatchEvent('myEvent', {log: "i'm zach"}))
+  }
+
+  render() {
+      return <button onClick={this.sendEvent}>Send</button>
+  }
+}
+```
+
+### EventBus
+
+```js
+function EventBus() {
+  const subscriptions = {};
+  this.subscribe = (eventType, callback) => {
+    const id = Symbol("id");
+    if (!subscriptions[eventType]) subscriptions[eventType] = {};
+    subscriptions[eventType][id] = callback;
+    return {
+      unsubscribe: function unsubscribe() {
+        delete subscriptions[eventType][id];
+        if (
+          Object.getOwnPropertySymbols(subscriptions[eventType]).length === 0
+        ) {
+          delete subscriptions[eventType];
+        }
+      },
+    };
+  };
+
+  this.publish = (eventType, arg) => {
+    if (!subscriptions[eventType]) return;
+
+    Object.getOwnPropertySymbols(subscriptions[eventType]).forEach((key) =>
+      subscriptions[eventType][key](arg)
+    );
+  };
+}
+export default EventBus;
 ```
 
 ## CSSTransition
@@ -698,8 +780,270 @@ export default class OptimizationComponent extends PureComponent {
 }
 ```
 
+## memo
+
+### React.memo()
+
+- PureComponent 是对 class 组件的性能优化，每次会对 props 进行浅比较，同时还可以在 shouldComponentUpdate 中进行深层次的控制
+- React.memo 这个 HOC 是对 Function Component 提供的，areEqual 参数相当于 shouldComponentUpdate 的作用
+
+1. 使用方式
+
+- areEqual 判断两次 props 是否不同，不传 areEqual 则对 props 进行浅比较
+
+```js
+function MyComponent(props) {
+  /* 使用 props 渲染 */
+}
+function areEqual(prevProps, nextProps) {
+  /*
+  如果把 nextProps 传入 render 方法的返回结果与
+  将 prevProps 传入 render 方法的返回结果一致则返回 true，
+  否则返回 false
+  */
+}
+export default React.memo(MyComponent, areEqual);
+```
+
+2. 性能优化
+
+- Parent Component
+
+```js
+// Parent Component
+export default (props = {}) => {
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(0);
+
+  return (
+    <>
+      <button onClick={()=>{setCount1(count1+1)})}>count1: {count} </button>
+      <button onClick={()=>{setCount2(count2+1)}}>count2: {number} </button>
+      <Son  count1={count1} count2={count2} /> <hr />
+      <MemoSon count1={count1} count2={count2} />
+    </>
+  );
+}
+```
+
+- Son Component
+
+```js
+export default (props = {}) => {
+  console.log(`Son Component`);
+  return <div>count1: {props.count1}</div>;
+};
+```
+
+- MemoSon Component
+
+```js
+const isEqual = (prevProps, nextProps) => {
+  if (prevProps.count2 !== nextProps.count2) {
+    return false;
+  }
+  return true;
+};
+
+export default memo((props = {}) => {
+  console.log(`--- memo re-render ---`);
+  return <div>count2: {props.count2}</div>;
+}, isEqual);
+```
+
+总结：count1、count2 的变化都会导致 Son 组件的重新渲染，而 MemoSon 只有在 count2 发生变化时才会重新渲染
+
+### useMemo()
+
+React.memo 始终包装整个组件，并且需要手动比较具体的 props，而某些时候我们只想要 template 进行 re-render，而不是整个组件 re-render，useMemo 可以实现局部 Pure 功能
+
+1. 基本用法
+
+```js
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+返回一个 memoized 值，只有当依赖项[a,b]发生变化时，才会重新计算这个 memoized 值，否则不会重新渲染。
+
+传入 useMemo 的函数会在渲染期间执行。请不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 useEffect 的适用范畴，而不是 useMemo。
+
+如果没有提供依赖项[a,b]，则每次都会重新计算 memoized 值
+
+2. 性能优化
+
+- UseMemoSon Component
+
+```js
+export default (props = {}) => {
+  console.log(`--- component re-render ---`);
+  return useMemo(() => {
+    console.log(`--- useMemo re-render ---`);
+    return (
+      <div>
+        <p>count2: {props.count2}</p>
+      </div>
+    );
+  }, [props.count2]);
+};
+```
+
+总结：useMemo 包装的是 return 部分的渲染逻辑，当 count1 发生变化是，会触发函数组件的重新渲染，打印 component re-render，但不会触发 return 返回函数的 re-render，只有在 count2 发生变化时才会打印 useMemo re-render
+
+- 感谢 [ai 哟](https://zhuanlan.zhihu.com/p/105940433)
+
 ## 组件库
 
 ### antd
 
 - 按需加载
+
+## 问题
+
+### useEffect
+
+在 useEffect 中进行异步获取数据，并使用 useState 设置数据时会导致内存泄露
+
+```
+Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+```
+
+- 原因：由于异步的 setState，如果此时此组件已经被销毁，但当异步结束时会去执行回调中 setState，改变数据的状态，因此造成了内存泄漏的风险。
+- 解决方法：需要在组件销毁时去清楚组件内部一些还在等待执行的回调
+  - useEffect 的返回参数是一个函数，此函数会在组件被销毁时执行，因此可以提前定义一个变量 unmounted，当组件销毁时改变 unmounted 的状态，异步回调内部根据 unmounted 的状态来确定是否要操作数据
+
+```js
+useEffect(() => {
+  let unmounted = false;
+  update(unmounted);
+  return () => {
+    unmounted = true;
+  };
+}, []);
+```
+
+### 在一个非路由组件中怎么使用 navigation 比较优雅
+
+### 在一个组件中多次更改一个 useState 创建的值
+
+```js
+const [data, setData] = useState(0);
+
+setData(1);
+setData(2);
+```
+
+### 函数组件请求数据
+
+问题：在函数组件中请求数据，API.UserListAll 被一直不停的调用
+
+```js
+export default function UserPower() {
+  const [tableData, setTableData] = useState([]);
+  window.API.UserListAll({
+    offset: 0,
+    count: 100,
+  }).then((users) => {
+    setTableData(users);
+  });
+
+  return <>{tableData}</>;
+}
+```
+
+自我猜测：setTableData 改变了渲染用到的数据，因此再次触发 UserPower render，无限循环。
+思考: 怎么在函数组件中只请求第一次，函数组件没有生命周期，难道只能用 class 组件来写吗
+
+解决方法：
+
+方案一：使用 useEffect
+
+```js
+useEffect(() => {
+  setLoading(true);
+  (async () => {
+    const res = await window.API.UserListAll<API.RequestData, API.UserInfo[]>({
+      offset: 0,
+      count: 100,
+    });
+    setTableData(data);
+    setLoading(false);
+  })();
+}, []);
+```
+
+### 自定义 hook 函数一直被执行问题
+
+1. 场景
+
+自定义 hook 中获取数据，到父组件中初始化数据，在子孙组件中使用
+
+2. 问题
+
+自定义 hook 函数会被循环执行
+
+- 自定义 useContext
+
+```ts
+import { useState } from "react";
+import { createContext } from "react";
+import { API } from "/src/api";
+export const Context = createContext(0);
+export function useContext(): [number, (id: number) => Promise<void>] {
+  const [state, setState] = useState<StateModel>(0);
+  const setData = async (id: number) => {
+    const res = await API({
+      id,
+    });
+    setState(res);
+  };
+  return [state, setData];
+}
+```
+
+- 父组件 Parent 中使用自定义 hook 创建初始数据
+
+```tsx
+import { Context } from "./hooks/useContext";
+import { useEffect } from "react";
+export function Parent() {
+  // useContext会被循环执行，导致接口一直被请求
+  const [state, setState] = useContext(0);
+  useEffect(() => {
+    setState(0);
+  }, []);
+  return (
+    <Context.Provider value={state}>
+      <Son1 />
+      <Son2 />
+    </Context.Provider>
+  );
+}
+```
+
+- 子组件 Son1 中使用 context
+
+```tsx
+import { Context } from "./hooks/useContext";
+import { useEffect, useContext } from "react";
+export function Son1() {
+  const context = useContext(Context);
+  useEffect(() => {
+    setState(0);
+  }, []);
+  return <div>Son1 context: {context}</div>;
+}
+```
+
+- 子组件 Son2 中使用 context
+
+```tsx
+import { Context } from "./hooks/useContext";
+import { useEffect, useContext } from "react";
+export function Son2() {
+  const context = useContext(Context);
+  useEffect(() => {
+    setState(0);
+  }, []);
+  return <div>Son2 context: {context}</div>;
+}
+```

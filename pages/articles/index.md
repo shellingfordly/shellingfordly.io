@@ -1,4 +1,4 @@
 ---
-name: React
+name: Articles
 notPage: true
 ---
