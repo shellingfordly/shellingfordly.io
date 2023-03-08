@@ -1,7 +1,7 @@
 import { LastRoute, RootRoute, ALL, helpCommand } from "@/contants";
 import { CommandType, ErrorType, FileType, ResultType } from "@/enum";
-import { getHistoryRoute, history } from "@/hooks/useCommand";
-import { RouteItem, RouteMap } from "@/types";
+import { commandList, getHistoryRoute, history } from "@/hooks/useCommand";
+import { CommandModel, RouteItem, RouteMap } from "@/types";
 import { handleRoute, handleEmpty, handleError } from "./handleResult";
 
 function handlePaths(paths: string, callback: (path: string) => void) {
@@ -151,5 +151,13 @@ export function createSearchCommand() {
   return (_: any, value: string) => {
     if (value) handleValue(value);
     return handleRoute();
+  };
+}
+
+export function createClearCommand() {
+  return (): CommandModel => {
+    return {
+      type: ResultType.Clear,
+    };
   };
 }

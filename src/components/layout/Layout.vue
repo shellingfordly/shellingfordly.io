@@ -8,21 +8,25 @@ const store = useStore();
 
 store.setRouteMap(router.getRoutes());
 
-const commandList = reactive<any[]>([]);
-const handleCommand = useCommand();
+const { commandList, handleCommand } = useCommand();
 
 function onEnter(value: string) {
   const command = handleCommand(value);
   if (command.type === ResultType.Page) {
-    router.push(command.content.path);
+    router.push(command.content?.path);
+    commandList.value = [];
+    return;
+  } else if (command.type === ResultType.Clear) {
+    commandList.value = [{ type: ResultType.Empty }];
+    return;
   }
-  commandList.push(command);
+  commandList.value.push(command);
 }
 </script>
 
 <template>
   <Command @on-enter="onEnter" />
-  <template v-for="command in commandList">
+  <div v-for="command in commandList">
     <CommandResult
       v-if="
         command.type === ResultType.Route || command.type === ResultType.Help
@@ -34,6 +38,11 @@ function onEnter(value: string) {
       v-else-if="command.type === ResultType.Error"
       v-bind="command"
     />
-    <Command :type="command.type" :path="command.value" @on-enter="onEnter" />
-  </template>
+    <Command
+      :type="command.type"
+      :value="command.value"
+      @on-enter="onEnter"
+      :key="command"
+    />
+  </div>
 </template>

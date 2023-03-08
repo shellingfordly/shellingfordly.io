@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { FileType, ResultType } from "@/enum";
+import { commandList } from "@/hooks/useCommand";
 import { RouteItem, RouteMap } from "@/types";
 import moment from "moment";
 import { PropType } from "vue";
@@ -41,6 +42,7 @@ const list = computed(() => {
 const router = useRouter();
 function go(item: RouteItem) {
   item.fileType === FileType.Page && router.push(item.path);
+  commandList.value = [];
 }
 </script>
 

@@ -4,6 +4,8 @@ import { RouteMap } from "@/types";
 import { cloneDeep } from "lodash";
 import { RouteRecordNormalized } from "vue-router";
 
+const getTime = (time: string) => new Date(time).getTime();
+
 export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
   const routeMap: RouteMap = {};
   const isNotPage = (route: RouteRecordNormalized) => {
@@ -26,6 +28,10 @@ export function getBaseRouteMap(baseRoute: RouteRecordNormalized[]) {
       });
     }
   });
+
+  Object.values(routeMap)
+    .sort((a, b) => getTime(b.date) - getTime(a.date))
+    .forEach((r, index) => (r.index = index));
 
   return routeMap;
 }

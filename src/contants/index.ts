@@ -1,4 +1,5 @@
 export const RootRoute = "~";
+export const NowRoute = "./";
 
 export const LastRoute = "../";
 

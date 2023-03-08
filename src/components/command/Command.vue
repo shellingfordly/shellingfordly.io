@@ -13,7 +13,7 @@ const props = defineProps<{
 const searchRef = ref();
 const searchValue = ref("");
 const emit = defineEmits(["onEnter"]);
-const isText = ref(!!props.value);
+const isText = ref(false);
 const path = ref(RootRoute);
 let history = getCommandHistory();
 let index = history.length;
@@ -27,6 +27,11 @@ onMounted(async () => {
 
   if ((props.type === ResultType.Route && props.path) || route) {
     path.value = props.path || (route?.key as string) || RootRoute;
+  } else if (props.type === ResultType.Empty) {
+    isText.value = false;
+    console.log(1111)
+    searchValue.value = "";
+    searchRef.value.focus();
   }
 });
 
@@ -68,7 +73,9 @@ function onKeyup(e: any) {
   <div class="command">
     <span class="arrow">➜</span>
     <span class="path">{{ path }}</span>
-    <span v-if="isText">{{ value || searchValue }}</span>
+    <span v-if="isText && (value || searchValue)">
+      {{ value || searchValue }}
+    </span>
     <div class="input" v-else>
       <input
         ref="searchRef"

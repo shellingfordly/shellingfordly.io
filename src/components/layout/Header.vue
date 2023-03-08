@@ -4,7 +4,6 @@ import moment from "moment";
 
 const isDark = useDark();
 const time = ref(moment());
-console.log(isDark);
 
 const timer = setInterval(() => {
   time.value = moment();

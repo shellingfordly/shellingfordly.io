@@ -9,6 +9,7 @@ import {
   createFindCommand,
   createOpenCommand,
   createSearchCommand,
+  createClearCommand,
 } from "@/utils/createCommand";
 import { handleEmpty, handleError } from "@/utils/handleResult";
 
@@ -17,6 +18,8 @@ export const history = reactive<HistoryModel>({
   routes: [],
   path: "",
 });
+// 指令结果
+export const commandList = ref<any[]>([]);
 
 const commandMap = {
   cd: createCdCommand(),
@@ -27,6 +30,7 @@ const commandMap = {
   open: createOpenCommand(),
   search: createSearchCommand(),
   s: createSearchCommand(),
+  clear: createClearCommand(),
 };
 
 export function useCommand() {
@@ -37,7 +41,7 @@ export function useCommand() {
     history.path = "";
   });
 
-  return (comStr: string) => {
+  const handleCommand = (comStr: string) => {
     let { command, value } = parseCommandString(comStr);
 
     const handleCommand = commandMap[command as keyof typeof commandMap];
@@ -55,6 +59,8 @@ export function useCommand() {
       });
     }
   };
+
+  return { handleCommand, commandList };
 }
 
 function parseCommandString(comStr: string) {

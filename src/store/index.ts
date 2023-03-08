@@ -1,16 +1,15 @@
 import { getBaseRouteMap, getRouteMap } from "@/utils";
-import { RouteItem, RouteMap } from "@/types";
+import { RouteMap } from "@/types";
 import { defineStore } from "pinia";
 import { RouteRecordNormalized } from "vue-router";
 
 export interface StoreType {
   routeMap: RouteMap;
-  allRoutes: RouteItem;
-  setRouteMap: () => void;
+  allRoutes: RouteMap;
 }
 
 export const useStore = defineStore("appStore", {
-  state() {
+  state(): StoreType {
     return {
       routeMap: {},
       allRoutes: {},
