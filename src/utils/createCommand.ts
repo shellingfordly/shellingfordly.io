@@ -4,12 +4,12 @@ import { getHistoryRoute, history } from "@/hooks/useCommand";
 import { RouteItem, RouteMap } from "@/types";
 import { handleRoute, handleEmpty, handleError } from "./handleResult";
 
-function handlePaths(paths: string, callback) {
+function handlePaths(paths: string, callback: (path: string) => void) {
   paths.split("/").forEach(callback);
 }
 
 export function createCdCommand() {
-  return (routerMap, value: string) => {
+  return (routerMap: any, value: string) => {
     // 跟路径
     if (value === undefined || value === RootRoute) {
       history.routes = [];
@@ -21,7 +21,7 @@ export function createCdCommand() {
       return handleEmpty();
     }
 
-    handlePaths(value, (path) => {
+    handlePaths(value, (path: string) => {
       const route = getHistoryRoute(CommandType.CD, path) || routerMap[path];
       if (route && route.type === ResultType.Route) {
         history.routes.push(route as RouteItem);
@@ -41,8 +41,8 @@ export function createCdCommand() {
   };
 }
 export function createLlCommand() {
-  return (routerMap, value: string, allRoutes: RouteMap) => {
-    let content;
+  return (routerMap: any, value: string, allRoutes: RouteMap) => {
+    let content: any;
     let _value = "";
 
     if (value === ALL) {
@@ -52,7 +52,7 @@ export function createLlCommand() {
     } else {
       content = getHistoryRoute() || routerMap;
       if (value) {
-        handlePaths(value, (path) => {
+        handlePaths(value, (path: string) => {
           content = content[path] || content.children[path];
         });
       }
@@ -63,7 +63,7 @@ export function createLlCommand() {
 }
 
 export function createCatCommand() {
-  return (routerMap, value: string) => {
+  return (routerMap: any, value: string) => {
     let content = getHistoryRoute(CommandType.CAT) || routerMap;
 
     handlePaths(value, (path) => {
@@ -87,7 +87,7 @@ export function createCatCommand() {
 }
 
 export function createHelpCommand() {
-  return (_, value: string) => {
+  return (_: any, value: string) => {
     return {
       type: ResultType.Help,
       content: helpCommand,
@@ -97,7 +97,7 @@ export function createHelpCommand() {
 }
 
 export function createFindCommand() {
-  return (_, value: string, allRoutes: RouteMap) => {
+  return (_: any, value: string, allRoutes: RouteMap) => {
     const content = Object.values(allRoutes).filter(
       (v) =>
         (v.name.includes(value) || v.path.includes(value)) &&
@@ -124,7 +124,7 @@ export function createOpenCommand() {
     window.open(url);
   }
 
-  return (_, value: string) => {
+  return (_: any, value: string) => {
     if (value) handleValue(value);
     return handleRoute();
   };
@@ -142,13 +142,13 @@ export function createSearchCommand() {
     const map = new SearchType();
     Object.keys(map).forEach((key) => {
       if (value.includes(key)) {
-        const url = map[key] + searchKey;
+        const url = (map as any)[key] + searchKey;
         window.open(url);
       }
     });
   }
 
-  return (_, value: string) => {
+  return (_: any, value: string) => {
     if (value) handleValue(value);
     return handleRoute();
   };

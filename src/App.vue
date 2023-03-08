@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const route = useRoute();
-const contentClass = computed(() => (route.path !== "/" ? "content" : ""));
+const contentClass = computed(() =>
+  route.path !== "/" ? "content" : "layout"
+);
 </script>
 
 <template>
@@ -11,6 +13,9 @@ const contentClass = computed(() => (route.path !== "/" ? "content" : ""));
 </template>
 
 <style lang="less">
+.layout {
+  width: 100%;
+}
 .content {
   padding-top: 20px;
   width: 70%;

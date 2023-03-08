@@ -66,23 +66,32 @@ function onKeyup(e: any) {
 
 <template>
   <div class="command">
-    <span class="arrow">➜</span>
-    <span class="path">{{ path }}</span>
+    <div>
+      <span class="arrow">➜</span>
+      <span class="path">{{ path }}</span>
+    </div>
     <span v-if="isText">{{ value || searchValue }}</span>
-    <input
-      v-else
-      ref="searchRef"
-      type="text"
-      v-model="searchValue"
-      @keyup="onKeyup"
-    />
+    <div class="input" v-else>
+      <input
+        ref="searchRef"
+        type="text"
+        v-model="searchValue"
+        @keyup="onKeyup"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .command {
+  display: flex;
+  align-items: center;
+
   span {
     vertical-align: middle;
+  }
+  .input {
+    flex: 1;
   }
 
   .arrow {
@@ -99,10 +108,11 @@ function onKeyup(e: any) {
   input {
     background-color: var(--c-bg);
     color: var(--c-text);
-    font-size: 22px;
+    font-size: 16px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
     font-weight: 500;
-    max-width: calc(100% - 70px);
-    min-width: calc(100% - 200px);
+    width: 100%;
   }
 }
 </style>
