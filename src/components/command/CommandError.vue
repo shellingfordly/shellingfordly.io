@@ -10,7 +10,7 @@ const errorMessage = computed(() => {
   const value = props.errorValue;
   switch (props.errorType) {
     case ErrorType.Command:
-      return `cmd: command not found: ${value}. See 'help'`;
+      return `cmd: command not found: ${value}. See 'help'.`;
     case ErrorType.Route:
       return `cmd: path not found: ${value}`;
     case ErrorType.Page:

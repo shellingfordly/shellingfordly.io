@@ -66,10 +66,8 @@ function onKeyup(e: any) {
 
 <template>
   <div class="command">
-    <div>
-      <span class="arrow">➜</span>
-      <span class="path">{{ path }}</span>
-    </div>
+    <span class="arrow">➜</span>
+    <span class="path">{{ path }}</span>
     <span v-if="isText">{{ value || searchValue }}</span>
     <div class="input" v-else>
       <input
@@ -90,9 +88,6 @@ function onKeyup(e: any) {
   span {
     vertical-align: middle;
   }
-  .input {
-    flex: 1;
-  }
 
   .arrow {
     font-size: 12px;
@@ -105,14 +100,18 @@ function onKeyup(e: any) {
     color: @linkText;
   }
 
-  input {
-    background-color: var(--c-bg);
-    color: var(--c-text);
-    font-size: 16px;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
-    font-weight: 500;
-    width: 100%;
+  .input {
+    flex: 1;
+
+    input {
+      background-color: var(--c-bg);
+      color: var(--c-text);
+      font-size: 16px;
+      font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
+      font-weight: 500;
+      width: 100%;
+    }
   }
 }
 </style>

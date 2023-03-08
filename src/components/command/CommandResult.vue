@@ -50,7 +50,7 @@ function go(item: RouteItem) {
       <li class="item" v-for="(item, index) in list">
         <template v-if="type === ResultType.Route">
           <span class="file-type">{{ item.fileType }}</span>
-          <span>{{ index + 1 }}</span>
+          <span class="index">{{ index + 1 }}</span>
           <span>{{ deteFormat(item.date) }}</span>
           <span>{{ item.key }}</span>
           <span :class="titleClass(item.fileType)" @click="go(item)">
@@ -72,10 +72,15 @@ function go(item: RouteItem) {
     .item {
       > span {
         display: inline-block;
-        margin-right: 30px;
+        min-width: 130px;
+        margin-right: 20px;
         @media screen and (max-width: 720px) {
           margin-right: 10px;
         }
+      }
+
+      .index {
+        min-width: 30px;
       }
 
       .file-type {
@@ -88,6 +93,7 @@ function go(item: RouteItem) {
 
       .title {
         color: @linkText;
+        margin-right: 0;
       }
 
       .link-text {
