@@ -4,6 +4,11 @@ export enum CommandType {
   CD,
 }
 
+export enum FileType {
+  File,
+  Dir,
+}
+
 export enum ResultType {
   Route,
   Page,

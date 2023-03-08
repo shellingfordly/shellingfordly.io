@@ -1,14 +1,13 @@
-
 import { ResultType } from "@/enum";
 import { CommandModel } from "@/types";
 
-export function handleEmpty(): CommandModel {
+export function EmptyResult(): CommandModel {
   return {
     type: ResultType.Empty,
   };
 }
 
-export function handleRoute({
+export function RouteResult({
   value = "",
   content,
 }: Partial<CommandModel> = {}): CommandModel {
@@ -19,7 +18,7 @@ export function handleRoute({
   };
 }
 
-export function handleError({
+export function ErrorResult({
   errorType,
   errorValue,
   value = "",

@@ -3,10 +3,12 @@ import { useCommand } from "@/hooks/useCommand";
 import { ResultType } from "@/enum";
 import { useStore } from "@/store";
 
+
 const router = useRouter();
 const store = useStore();
 
 store.setRouteMap(router.getRoutes());
+store.initFilesMap(router.getRoutes() as any[]);
 
 const { commandList, handleCommand } = useCommand();
 
