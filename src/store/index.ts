@@ -1,13 +1,15 @@
 import { getBaseRouteMap, getRouteMap } from "@/utils";
-import { RouteMap, FileInfo, RouteItem1 } from "@/types";
+import { RouteMap, FileInfo, RouteItem1, FilesMap } from "@/types";
 import { defineStore } from "pinia";
 import { RouteRecordNormalized } from "vue-router";
-import { createAllFilesMap } from "@/utils/routesHandle";
+import { createAllFilesMap, createTreeFilesMap } from "@/utils/routesHandle";
 
 export interface StoreType {
   routeMap: RouteMap;
   allRoutes: RouteMap;
+  // 所有文章文件信息
   allFileList: FileInfo[];
+  treeFilesMap: FilesMap;
 }
 
 export const useStore = defineStore("appStore", {
@@ -16,6 +18,7 @@ export const useStore = defineStore("appStore", {
       routeMap: {},
       allRoutes: {},
       allFileList: [],
+      treeFilesMap: {},
     };
   },
   actions: {
@@ -28,8 +31,10 @@ export const useStore = defineStore("appStore", {
           r.path !== "/"
       );
 
+      // 创建 所有文章 文件信息
       this.allFileList = createAllFilesMap(_routes);
-      console.log(this.allFileList)
+      // 创建 树结构的 文件结构
+      this.treeFilesMap = createTreeFilesMap(_routes);
     },
     setRouteMap(baseRoutes: RouteRecordNormalized[]) {
       const _baseRoutes = baseRoutes.filter((v) => {

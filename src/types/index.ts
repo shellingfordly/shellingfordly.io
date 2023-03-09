@@ -1,4 +1,5 @@
-import { ResultType, ErrorType,FileType } from "@/enum";
+import { CommandHandleCode, CommandHandleType } from "./../enum/index";
+import { ResultType, ErrorType, FileType } from "@/enum";
 import { RouteRecordNormalized } from "vue-router";
 
 export interface CommandModel {
@@ -29,12 +30,13 @@ export interface FileInfo {
   // 文章标题
   title: string;
   // 文件类型
-  type: FileType
+  type: FileType;
   fileName: string;
   date: number;
   author: string;
   tag: string;
-  children?: FilesMap;
+  // 其他信息
+  other: Record<string, string>;
 }
 
 export interface RouteItem1 extends RouteRecordNormalized {
@@ -43,11 +45,24 @@ export interface RouteItem1 extends RouteRecordNormalized {
   };
 }
 
-export type FilesMap = Record<string, FileInfo>;
+export interface TreeFileItem extends FileInfo {
+  parent: string;
+  children: FilesMap;
+}
+
+export type FilesMap = Record<string, TreeFileItem>;
 
 export type RouteMap = Record<string, RouteItem>;
 
 export interface HistoryModel {
   routes: RouteItem[];
   path: string;
+}
+
+export interface CommandHandleResult {
+  code: CommandHandleCode;
+  type: CommandHandleType;
+  content: FilesMap | TreeFileItem[] | FileInfo[] | string;
+  path: string;
+  commandStr?: string;
 }

@@ -1,7 +1,10 @@
 export const RootRoute = "~";
-export const NowRoute = "./";
-
 export const LastRoute = "../";
+export const CurrentRoute = "./";
+
+export const RootDir = "~";
+export const LastDir = "../";
+export const CurrentDir = "./";
 
 export const ALL = "-a";
 

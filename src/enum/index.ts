@@ -3,6 +3,23 @@ export enum CommandType {
   CAT,
   CD,
 }
+export enum CommandHandleType {
+  Ll,
+  Cat,
+  Cd,
+  Find,
+  Open,
+  Search,
+  Clear,
+}
+
+export enum CommandHandleCode {
+  Ok,
+  NotFind,
+  Error,
+  NotCommand,
+  NotValue,
+}
 
 export enum FileType {
   File,

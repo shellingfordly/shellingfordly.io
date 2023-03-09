@@ -1,3 +1,3 @@
 <template>
-  <Layout />
+  <Layout1 />
 </template>

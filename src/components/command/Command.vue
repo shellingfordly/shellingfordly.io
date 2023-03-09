@@ -44,6 +44,7 @@ function setCommandHistory(value: string) {
   }
   const h = getCommandHistory().filter((v) => v);
   h.push(value);
+  console.log(h)
   sessionStorage.setItem(COMMAND_HISTORY, JSON.stringify(h));
 }
 
