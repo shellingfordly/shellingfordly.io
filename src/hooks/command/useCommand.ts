@@ -1,5 +1,5 @@
 import { CommandHandleResult } from "@/types/index";
-import { CommandHandleType } from "@/enum";
+import { CommandHandleType, CommandResultType } from "@/enum";
 import { useStore } from "@/store";
 import { CommandHandle } from "./commandHandle";
 
@@ -17,19 +17,25 @@ export function useCommand() {
   const getCommandCache = () => commandHandle.getCommandCache();
   const getPathCache = () => commandHandle.getPathCache();
 
+  const router = useRouter();
+
   const handleCommand = (comStr: string) => {
-    if (!comStr) return;
+    if (!comStr) return {} as any;
     commandHandle.setCommandStr(comStr);
 
     const result = commandHandle.run();
-
-    console.log(result)
 
     if (result.type == CommandHandleType.Clear) {
       commandResultList.value = [];
     } else {
       commandResultList.value.push(result);
     }
+
+    if (result.resultType == CommandResultType.ViewFile) {
+      router.push(result.path as string);
+    }
+
+    return result;
   };
 
   return { commandResultList, handleCommand, getCommandCache, getPathCache };

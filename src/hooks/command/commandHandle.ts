@@ -1,9 +1,10 @@
 import { cloneDeep } from "lodash";
-import { RootDir, LastDir } from "@/contants";
+import { RootDir, LastDir, CurrentDir } from "@/contants";
 import {
   CommandHandleCode,
   CommandHandleType,
   CommandResultType,
+  FileType,
 } from "@/enum";
 import { FilesMap, FileInfo, CommandHandleResult, CommandInfo } from "@/types";
 
@@ -109,6 +110,8 @@ export class CommandHandle {
       if (lastPath) {
         paths = createPaths(LastDir);
       }
+    } else if (value.startsWith(CurrentDir)) {
+      paths = createPaths(CurrentDir);
     }
     // 当前目录开头
     else {
@@ -124,19 +127,20 @@ export class CommandHandle {
     if (!paths.length) {
       content = cloneDeep(this.filesMap);
     } else {
-      let _content: FilesMap = {};
+      let _content: FilesMap = this.nowFilesMap;
       // 遍历当前目录树找到path目录
       for (const _path of paths) {
-        if (!this.nowFilesMap[_path]) {
+        const file = _content[_path];
+        if (!file) {
           return {};
         }
-        _content = this.nowFilesMap[_path].children;
+        if (file.type === FileType.Dir) {
+          _content = _content[_path].children;
+        } else if (file.type === FileType.File) {
+          return _content[_path];
+        }
       }
       content = _content;
-
-      if (JSON.stringify(_content) != "{}") {
-        this.pathCache = this.pathCache.concat(paths);
-      }
     }
 
     return content;
@@ -186,6 +190,8 @@ export class CommandHandle {
 
     if (JSON.stringify(content) == "{}") {
       code = CommandHandleCode.NotFindDir;
+    } else {
+      this.pathCache = this.pathCache.concat(paths);
     }
 
     return {
@@ -202,24 +208,46 @@ export class CommandHandle {
    * 处理ll指令
    */
   llCommand(command: CommandInfo): CommandHandleResult {
+    let code = CommandHandleCode.Ok;
+
+    const paths = this.pathHandle(command.value);
+    const content = this.fileHandle(paths);
+
+    if (JSON.stringify(content) == "{}") {
+      code = CommandHandleCode.NotFindDir;
+      this.pathCache = this.pathCache.concat(paths);
+    }
+
     command.value = command.value || this.pathCache[this.pathCache.length - 1];
-    const result = this.cdCommand(command);
 
     return {
-      ...result,
+      code,
+      content,
+      path: "",
       type: CommandHandleType.Ll,
       resultType: CommandResultType.ViewDir,
+      command,
     };
   }
 
   /**
    * 处理cat指令
    */
-  catCommand(cInfo: CommandInfo): CommandHandleResult {
-    const result = this.cdCommand(cInfo);
+  catCommand(command: CommandInfo): CommandHandleResult {
+    let code = CommandHandleCode.Success;
+
+    const paths = this.pathHandle(command.value);
+    const content = this.fileHandle(paths);
+
+    if (JSON.stringify(content) == "{}") {
+      code = CommandHandleCode.NotFindFile;
+    }
 
     return {
-      ...result,
+      code,
+      content,
+      command,
+      path: (content.path as string) || "",
       type: CommandHandleType.Cat,
       resultType: CommandResultType.ViewFile,
     };
@@ -260,7 +288,7 @@ export class CommandHandle {
    * 处理open指令
    */
   openCommand(command: CommandInfo): CommandHandleResult {
-    let code = CommandHandleCode.Ok;
+    let code = CommandHandleCode.Success;
     const value = command.value;
     let url = "https://";
     if (value) {
@@ -272,6 +300,7 @@ export class CommandHandle {
       if (!value.includes(".com")) {
         url += ".com";
       }
+      window.open(url);
     } else {
       code = CommandHandleCode.NotValue;
     }
@@ -300,12 +329,13 @@ export class CommandHandle {
     baseUrl.g = baseUrl.google;
 
     let url = baseUrl[command.prop];
-    let code = CommandHandleCode.Ok;
+    let code = CommandHandleCode.Success;
 
     if (!url) {
       code = CommandHandleCode.NotValue;
     } else if (command.value) {
       url += command.value;
+      window.open(url);
     }
 
     return {

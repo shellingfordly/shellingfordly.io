@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { commandResultList, handleCommand, useCommand } from "@/hooks/command";
+import { RootDir } from "@/contants";
+import { CommandResultType } from "@/enum";
+import {
+  commandResultList,
+  getPathCache,
+  handleCommand,
+  useCommand,
+} from "@/hooks/command";
 import { useStore } from "@/store";
 
 const router = useRouter();

@@ -3,7 +3,7 @@ import type { ComputedRef } from "vue";
 import { useCommand as _useCommand } from "./useCommand";
 
 let commandResultList: ComputedRef<CommandHandleResult[]> | null = null;
-let handleCommand = (_: string) => {};
+let handleCommand: (_: string) => CommandHandleResult;
 let getCommandCache = (): string[] => [];
 let getPathCache = (): string[] => [];
 

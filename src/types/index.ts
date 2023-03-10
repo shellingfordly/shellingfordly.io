@@ -34,7 +34,13 @@ export interface CommandHandleResult {
   code: CommandHandleCode;
   type?: CommandHandleType;
   resultType?: CommandResultType;
-  content?: FilesMap | TreeFileItem[] | FileInfo[] | string;
+  content?:
+    | FilesMap
+    | TreeFileItem
+    | TreeFileItem[]
+    | FileInfo
+    | FileInfo[]
+    | string;
   path?: string;
   command: CommandInfo;
 }

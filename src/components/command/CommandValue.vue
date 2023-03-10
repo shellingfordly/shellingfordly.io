@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { RootDir } from "@/contants";
 import { getCommandCache, handleCommand, getPathCache } from "@/hooks/command";
+import path from "path";
 
 const props = defineProps<{
   path: string;
@@ -13,13 +14,16 @@ const command = ref("");
 let commandCache: string[] = [];
 let index = -1;
 
-const currentPath = computed(() => {
-  if (props.path) return props.path;
-  else {
+const currentPath = () => {
+  if (props.path) {
+    if (props.path.includes("/")) return RootDir;
+    return props.path;
+  } else {
     const path = getPathCache().pop();
+    console.log(path);
     return path || RootDir;
   }
-});
+};
 
 watch(
   () => props.commandStr,
@@ -67,7 +71,7 @@ onMounted(() => {
 <template>
   <div class="command">
     <span class="arrow"> ➜ </span>
-    <span class="path"> {{ currentPath }} </span>
+    <span class="path"> {{ currentPath() }} </span>
     <span v-if="commandStr"> {{ commandStr }} </span>
     <input
       v-else

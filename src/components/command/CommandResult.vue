@@ -15,6 +15,7 @@ const props = defineProps<{
   resultType?: CommandResultType;
   content?: FilesMap | TreeFileItem[] | FileInfo[] | string;
   command: CommandInfo;
+  path?: string;
 }>();
 
 const deteFormat = (time: number) => moment(time).format("YYYY/MM/DD");
@@ -63,9 +64,6 @@ function go(item: FileInfo) {
         <span :class="titleClass(item.type)" @click="() => go(item)">
           {{ item.title }}
         </span>
-        <router-link v-if="item.type === FileType.File" :to="item.path">
-          {{ item.title }}
-        </router-link>
       </li>
     </ul>
     <ul v-else-if="resultType === CommandResultType.Help" class="list">
