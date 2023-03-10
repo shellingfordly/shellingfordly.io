@@ -1,28 +1,6 @@
 import { CommandHandleCode, CommandHandleType } from "./../enum/index";
-import { ResultType, ErrorType, FileType } from "@/enum";
+import { CommandResultType, FileType } from "@/enum";
 import { RouteRecordNormalized } from "vue-router";
-
-export interface CommandModel {
-  type: ResultType;
-  value?: string;
-  errorType?: ErrorType;
-  errorValue?: string;
-  content?: RouteItem | RouteItem[] | RouteMap;
-}
-
-export interface RouteItem {
-  key: string;
-  name: string;
-  path: string;
-  type: ResultType;
-  parent: string | null;
-  fileType: string;
-  date: string;
-  author: string;
-  tag: string;
-  children?: RouteMap;
-  index?: number;
-}
 
 export interface FileInfo {
   // 文章路由
@@ -52,17 +30,18 @@ export interface TreeFileItem extends FileInfo {
 
 export type FilesMap = Record<string, TreeFileItem>;
 
-export type RouteMap = Record<string, RouteItem>;
-
-export interface HistoryModel {
-  routes: RouteItem[];
-  path: string;
-}
-
 export interface CommandHandleResult {
   code: CommandHandleCode;
-  type: CommandHandleType;
-  content: FilesMap | TreeFileItem[] | FileInfo[] | string;
-  path: string;
-  commandStr?: string;
+  type?: CommandHandleType;
+  resultType?: CommandResultType;
+  content?: FilesMap | TreeFileItem[] | FileInfo[] | string;
+  path?: string;
+  command: CommandInfo;
+}
+
+export interface CommandInfo {
+  original: string;
+  command: string;
+  prop: string;
+  value: string;
 }

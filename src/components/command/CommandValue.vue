@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { RootDir } from "@/contants";
-import { CommandHandleCode } from "@/enum";
 import { getCommandCache, handleCommand, getPathCache } from "@/hooks/command";
 
-const emit = defineEmits(["onEnter"]);
 const props = defineProps<{
-  code: CommandHandleCode;
   path: string;
+  commandStr: string;
 }>();
 
 const commandRef = ref();
@@ -17,20 +15,22 @@ let index = -1;
 
 const currentPath = computed(() => {
   if (props.path) return props.path;
-  const paths = getPathCache();
-  if (paths.length) {
-    return paths[paths.length - 1];
-  } else {
-    return RootDir;
+  else {
+    const path = getPathCache().pop();
+    return path || RootDir;
   }
 });
 
 watch(
-  () => props.code,
-  () => {
-    if (props.code >= 0) {
+  () => props.commandStr,
+  (commandStr) => {
+    if (props.commandStr) {
       isActive.value = false;
+      command.value = commandStr;
     }
+  },
+  {
+    immediate: true,
   }
 );
 
@@ -44,7 +44,7 @@ function onKeyup(e: any) {
     commandCache = getCommandCache();
     // 更新 历史指令index
     index = commandCache.length;
-    isActive.value = false;
+    command.value = "";
   }
   // 方向键 上
   else if (key === "ArrowUp") {
@@ -68,10 +68,14 @@ onMounted(() => {
   <div class="command">
     <span class="arrow"> ➜ </span>
     <span class="path"> {{ currentPath }} </span>
-    <span v-if="!isActive"> {{ command }} </span>
-    <div v-else class="input">
-      <input ref="commandRef" type="text" v-model="command" @keyup="onKeyup" />
-    </div>
+    <span v-if="commandStr"> {{ commandStr }} </span>
+    <input
+      v-else
+      ref="commandRef"
+      type="text"
+      v-model="command"
+      @keyup="onKeyup"
+    />
   </div>
 </template>
 
@@ -95,18 +99,15 @@ onMounted(() => {
     color: @linkText;
   }
 
-  .input {
+  input {
     flex: 1;
-
-    input {
-      background-color: var(--c-bg);
-      color: var(--c-text);
-      font-size: 16px;
-      font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-        "Lucida Sans", Arial, sans-serif;
-      font-weight: 500;
-      width: 100%;
-    }
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    font-size: 16px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+    font-weight: 500;
+    width: 100%;
   }
 }
 </style>

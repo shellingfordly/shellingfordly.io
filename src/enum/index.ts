@@ -11,41 +11,31 @@ export enum CommandHandleType {
   Open,
   Search,
   Clear,
+  Unknown,
 }
 
 export enum CommandHandleCode {
   Ok,
   NotFind,
+  NotFindDir,
+  NotFindFile,
   Error,
   NotCommand,
   NotValue,
+  Success,
 }
 
 export enum FileType {
-  File,
+  File = "--article--",
+  Dir = "--directory--",
+}
+
+export enum CommandResultType {
   Dir,
-}
-
-export enum ResultType {
-  Route,
-  Page,
-  Error,
+  ViewDir,
+  File,
+  ViewFile,
+  String,
+  Link,
   Help,
-  Empty,
-  Clear,
-}
-
-export enum ErrorType {
-  Command,
-  Route,
-  Page,
-  NotRoute,
-  NotPage,
-  NotFindRouteOrPage,
-  NotFind,
-}
-
-export enum FileType {
-  Route = "--directory--",
-  Page = "--article--",
 }

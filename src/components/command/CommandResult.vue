@@ -1,68 +1,77 @@
 <script lang="ts" setup>
-import { FileType, ResultType } from "@/enum";
-import { commandList } from "@/hooks/useCommand";
-import { RouteItem, RouteMap } from "@/types";
+import {
+  CommandHandleCode,
+  CommandHandleType,
+  FileType,
+  CommandResultType,
+} from "@/enum";
+import { errorMessageHandle } from "@/hooks/command/errorMessage";
+import { FileInfo, FilesMap, TreeFileItem, CommandInfo } from "@/types";
 import moment from "moment";
-import { PropType } from "vue";
 
-const props = defineProps({
-  content: {
-    type: Object as PropType<RouteMap | Record<string, string>>,
-  },
-  type: {
-    type: Number as PropType<ResultType>,
-    default: ResultType.Route,
-  },
-});
+const props = defineProps<{
+  code: CommandHandleCode;
+  type?: CommandHandleType;
+  resultType?: CommandResultType;
+  content?: FilesMap | TreeFileItem[] | FileInfo[] | string;
+  command: CommandInfo;
+}>();
 
-const deteFormat = (time: string) => moment(time).format("YYYY/MM/DD");
+const deteFormat = (time: number) => moment(time).format("YYYY/MM/DD");
 const titleClass = (type: FileType) => [
   "title",
-  type === FileType.Page && "link-text",
+  type === FileType.File && "link-text",
 ];
 
-const sort = (list: any[]) => list.sort((a, b) => a.index - b.index);
-
-const list = computed(() => {
-  if (!props.content) {
-    return [];
+const contentList = computed(() => {
+  if (props.resultType === CommandResultType.ViewDir && props.content) {
+    return Object.values(props.content);
   }
+  return [];
+});
 
-  if (props.type === ResultType.Help) {
-    return Object.entries(props.content);
-  }
-
-  if (props.content.type === undefined) {
-    return sort(Object.values(props.content));
-  } else {
-    return sort(Object.values(props.content.children));
+const message = computed(() => {
+  if (props.resultType === CommandResultType.String) {
+    return props.content;
+  } else if (props.code > CommandHandleCode.Ok) {
+    return errorMessageHandle(
+      props.code,
+      props.command.command,
+      props.command.value
+    );
   }
 });
 
 const router = useRouter();
-function go(item: RouteItem) {
-  item.fileType === FileType.Page && router.push(item.path);
-  commandList.value = [];
+function go(item: FileInfo) {
+  if (item.type === FileType.File && item.path) {
+    router.push(item.path);
+  }
 }
 </script>
 
 <template>
   <div class="nav-bar">
-    <ul class="list">
-      <li class="item" v-for="(item, index) in list">
-        <template v-if="type === ResultType.Route">
-          <span class="file-type">{{ item.fileType }}</span>
-          <span class="index">{{ index + 1 }}</span>
-          <span>{{ deteFormat(item.date) }}</span>
-          <span>{{ item.key }}</span>
-          <span :class="titleClass(item.fileType)" @click="go(item)">
-            {{ item.name }}
-          </span>
-        </template>
-        <template v-else-if="type === ResultType.Help">
-          <span class="command">{{ item[0] }}:</span>
-          <span>{{ item[1] }}</span>
-        </template>
+    <div v-if="message">
+      {{ message }}
+    </div>
+    <ul v-else-if="resultType === CommandResultType.ViewDir" class="list">
+      <li class="item" v-for="item in contentList">
+        <span class="file-type">{{ item.type }}</span>
+        <span>{{ deteFormat(item.date) }}</span>
+        <span>{{ item.fileName }}</span>
+        <span :class="titleClass(item.type)" @click="() => go(item)">
+          {{ item.title }}
+        </span>
+        <router-link v-if="item.type === FileType.File" :to="item.path">
+          {{ item.title }}
+        </router-link>
+      </li>
+    </ul>
+    <ul v-else-if="resultType === CommandResultType.Help" class="list">
+      <li v-for="item in contentList">
+        <span class="command">{{ item[0] }}:</span>
+        <span>{{ item[1] }}</span>
       </li>
     </ul>
   </div>

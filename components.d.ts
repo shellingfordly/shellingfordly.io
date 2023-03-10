@@ -5,15 +5,10 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Command: typeof import('./src/components/command/Command.vue')['default']
-    Command1: typeof import('./src/components/command1/Command1.vue')['default']
-    CommandError: typeof import('./src/components/command/CommandError.vue')['default']
-    CommandError1: typeof import('./src/components/command1/CommandError1.vue')['default']
     CommandResult: typeof import('./src/components/command/CommandResult.vue')['default']
-    CommandResult1: typeof import('./src/components/command1/CommandResult1.vue')['default']
+    CommandValue: typeof import('./src/components/command/CommandValue.vue')['default']
     Header: typeof import('./src/components/layout/Header.vue')['default']
     Layout: typeof import('./src/components/layout/Layout.vue')['default']
-    Layout1: typeof import('./src/components/layout/Layout1.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

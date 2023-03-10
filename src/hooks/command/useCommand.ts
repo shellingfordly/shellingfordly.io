@@ -1,21 +1,21 @@
-import { CommandHandleResult } from "./../../types/index";
+import { CommandHandleResult } from "@/types/index";
 import { CommandHandleType } from "@/enum";
 import { useStore } from "@/store";
 import { CommandHandle } from "./commandHandle";
 
+const commandHandle = new CommandHandle();
+const commandResultList = ref<CommandHandleResult[]>([]);
+
 export function useCommand() {
   const store = useStore();
-  const commandList = ref<CommandHandleResult[]>([]);
 
-  const commandHandle = new CommandHandle({
+  commandHandle.init({
     filesMap: store.treeFilesMap,
     allFileList: store.allFileList,
   });
 
-  const getCommandCache = () => {
-    return commandHandle.getCommandCache;
-  };
-  const getPathCache = () => commandHandle.getPathCache;
+  const getCommandCache = () => commandHandle.getCommandCache();
+  const getPathCache = () => commandHandle.getPathCache();
 
   const handleCommand = (comStr: string) => {
     if (!comStr) return;
@@ -23,12 +23,14 @@ export function useCommand() {
 
     const result = commandHandle.run();
 
+    console.log(result)
+
     if (result.type == CommandHandleType.Clear) {
-      commandList.value = [];
+      commandResultList.value = [];
     } else {
-      commandList.value.push(result);
+      commandResultList.value.push(result);
     }
   };
 
-  return { commandList, handleCommand, getCommandCache, getPathCache };
+  return { commandResultList, handleCommand, getCommandCache, getPathCache };
 }
