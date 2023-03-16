@@ -20,7 +20,6 @@ const currentPath = () => {
     return props.path;
   } else {
     const path = getPathCache().pop();
-    console.log(path);
     return path || RootDir;
   }
 };

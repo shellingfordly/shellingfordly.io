@@ -87,7 +87,7 @@ export class CommandHandle {
   pathHandle(value: string) {
     // 没有输入目录
     if (!value) {
-      return [];
+      return [...this.pathCache];
     }
 
     let paths: string[] = [];
@@ -118,7 +118,7 @@ export class CommandHandle {
       paths = createPaths();
     }
 
-    return paths;
+    return this.pathCache.concat(paths);
   }
 
   fileHandle(paths: string[]) {
@@ -182,11 +182,11 @@ export class CommandHandle {
    */
   cdCommand(command: CommandInfo): CommandHandleResult {
     let code = CommandHandleCode.Ok;
+    // 存一下上一次的文件地址
+    let path = this.pathCache[this.pathCache.length - 1] || RootDir;
 
     const paths = this.pathHandle(command.value);
     const content = this.fileHandle(paths);
-
-    let path = paths[paths.length - 1] || "";
 
     if (JSON.stringify(content) == "{}") {
       code = CommandHandleCode.NotFindDir;
@@ -211,6 +211,9 @@ export class CommandHandle {
     let code = CommandHandleCode.Ok;
 
     const paths = this.pathHandle(command.value);
+
+    console.log("paths: ", paths);
+
     const content = this.fileHandle(paths);
 
     if (JSON.stringify(content) == "{}") {

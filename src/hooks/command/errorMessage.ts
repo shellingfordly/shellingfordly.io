@@ -7,7 +7,7 @@ export function errorMessageHandle(
 ) {
   switch (error) {
     case CommandHandleCode.Success:
-      return `cmd: ${command} find ${value} success.`;
+      return `cmd: ${command} ${value} success.`;
     case CommandHandleCode.NotCommand:
       return `cmd: command not found: ${command}. See 'help'.`;
     case CommandHandleCode.NotFind:

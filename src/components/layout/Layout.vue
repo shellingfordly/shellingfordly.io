@@ -27,7 +27,7 @@ function onEnter(value: string) {
   <CommandValue v-if="!resultList.length" @on-enter="onEnter" />
   <div v-for="result in resultList">
     <CommandValue :path="result.path" :commandStr="result.command.original" />
-    <commandResult v-bind="result" />
+    <commandResult v-bind="result" :path="result.path" />
   </div>
   <CommandValue v-if="resultList.length" @on-enter="onEnter" />
 </template>
