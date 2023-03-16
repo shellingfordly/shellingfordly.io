@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { RootDir } from "@/contants";
 import { getCommandCache, handleCommand, getPathCache } from "@/hooks/command";
-import path from "path";
 
 const props = defineProps<{
   path: string;
@@ -61,9 +60,11 @@ function onKeyup(e: any) {
 
 onMounted(() => {
   // 聚焦
-  if (commandRef.value) {
-    commandRef.value.focus();
-  }
+  if (commandRef.value) commandRef.value.focus();
+
+  // 滚动
+  const layout = document.getElementsByClassName("layout")[0];
+  if (layout) document.body.scrollTop = layout.scrollHeight;
 });
 </script>
 
