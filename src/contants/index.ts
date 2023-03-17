@@ -14,7 +14,7 @@ export const helpCommandResult = {
   help: "查看帮助",
 };
 
-export const COMMAND_HISTORY = "COMMAND_HISTORY";
+export const COMMAND_CACHE = "COMMAND_CACHE";
 
 export const DEFAULT_TIME = "2022-05-10";
 

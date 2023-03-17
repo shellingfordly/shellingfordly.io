@@ -1,4 +1,4 @@
-import { CommandHandleCode, CommandHandleType } from "./../enum/index";
+import { CommandHandleCode, CommandHandleType } from "../enum/index";
 import { CommandResultType, FileType } from "@/enum";
 import { RouteRecordNormalized } from "vue-router";
 

@@ -26,7 +26,10 @@ export const createApp = ViteSSG(
       router.beforeEach(() => {
         NProgress.start();
       });
-      router.afterEach(() => {
+      router.afterEach((to) => {
+        if (to.path !== "/") {
+          document.body.scrollTo(0, 0);
+        }
         NProgress.done();
       });
     }

@@ -1,5 +1,11 @@
 import { cloneDeep } from "lodash";
-import { RootDir, LastDir, CurrentDir, helpCommandResult } from "@/contants";
+import {
+  RootDir,
+  LastDir,
+  CurrentDir,
+  helpCommandResult,
+  COMMAND_CACHE,
+} from "@/contants";
 import {
   CommandHandleCode,
   CommandHandleType,
@@ -18,7 +24,7 @@ type CommandHandleMap = Record<string, (...arg: any) => any>;
 
 export class CommandHandle {
   // 指令缓存
-  commandCache: string[] = [];
+  private commandCache: string[] = [];
   // 目录缓存
   pathCache: string[] = [];
 
@@ -57,7 +63,8 @@ export class CommandHandle {
   };
 
   getCommandCache() {
-    return [...this.commandCache];
+    const value = localStorage.getItem(COMMAND_CACHE);
+    return value ? JSON.parse(value) : [];
   }
 
   getPathCache() {
@@ -67,6 +74,7 @@ export class CommandHandle {
   setCommandStr(commandStr: string) {
     this.commandStr = commandStr;
     this.commandCache.push(commandStr);
+    localStorage.setItem(COMMAND_CACHE, JSON.stringify(this.commandCache));
   }
 
   run(): CommandHandleResult {
