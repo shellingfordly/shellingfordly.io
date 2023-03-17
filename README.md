@@ -1,4 +1,4 @@
-### [Shellingfordly](https://shellingfordly.github.io/)
+### [shellingfordly](https://shellingfordly.vercel.app/)
 
 my personal website of a terminal interface.
 
