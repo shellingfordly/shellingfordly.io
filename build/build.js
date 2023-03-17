@@ -52,7 +52,7 @@ async function moveFiles(oldPath, newPath) {
 }
 
 const oldPath = join(__dirname, "../dist");
-const newPath = join(__dirname, "../../shellingfordly.io");
+const newPath = join(__dirname, "../../pages");
 
 deleteFiles(newPath).then(() => {
   moveFiles(oldPath, newPath);
