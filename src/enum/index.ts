@@ -12,6 +12,7 @@ export enum CommandHandleType {
   Search,
   Clear,
   Unknown,
+  Help,
 }
 
 export enum CommandHandleCode {

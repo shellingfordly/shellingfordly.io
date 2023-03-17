@@ -32,6 +32,7 @@ function onClick() {
           shellingfordly
         </a>
       </p>
+      <p>See "help".</p>
     </div>
     <div class="right">
       <Icon

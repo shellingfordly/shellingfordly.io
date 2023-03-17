@@ -1,5 +1,5 @@
 import { cloneDeep } from "lodash";
-import { RootDir, LastDir, CurrentDir } from "@/contants";
+import { RootDir, LastDir, CurrentDir, helpCommandResult } from "@/contants";
 import {
   CommandHandleCode,
   CommandHandleType,
@@ -51,6 +51,9 @@ export class CommandHandle {
     search: this.searchCommand,
     s: this.searchCommand,
     clear: this.clearCommand,
+    c: this.clearCommand,
+    help: this.helpCommand,
+    h: this.helpCommand,
   };
 
   getCommandCache() {
@@ -360,6 +363,20 @@ export class CommandHandle {
       type: CommandHandleType.Clear,
       resultType: CommandResultType.String,
       content: "",
+      path: "",
+      command,
+    };
+  }
+
+  /**
+   * 处理help指令
+   */
+  helpCommand(command: CommandInfo): CommandHandleResult {
+    return {
+      code: CommandHandleCode.Ok,
+      type: CommandHandleType.Help,
+      resultType: CommandResultType.Help,
+      content: helpCommandResult,
       path: "",
       command,
     };

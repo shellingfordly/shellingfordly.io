@@ -66,10 +66,10 @@ function go(item: FileInfo) {
         </span>
       </li>
     </ul>
-    <ul v-else-if="resultType === CommandResultType.Help" class="list">
-      <li v-for="item in contentList">
-        <span class="command">{{ item[0] }}:</span>
-        <span>{{ item[1] }}</span>
+    <ul v-else-if="resultType === CommandResultType.Help">
+      <li v-for="(item, key) in content">
+        <span class="command">{{ key }}:</span>
+        <span>{{ item }}</span>
       </li>
     </ul>
   </div>
@@ -112,11 +112,12 @@ function go(item: FileInfo) {
           text-decoration: underline;
         }
       }
-
-      .command {
-        width: 60px;
-      }
     }
   }
+}
+
+.command {
+  display: inline-block;
+  width: 65px;
 }
 </style>

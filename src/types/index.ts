@@ -2,6 +2,8 @@ import { CommandHandleCode, CommandHandleType } from "./../enum/index";
 import { CommandResultType, FileType } from "@/enum";
 import { RouteRecordNormalized } from "vue-router";
 
+export type AnyObj = Record<string, string>;
+
 export interface FileInfo {
   // 文章路由
   path: string;
@@ -14,12 +16,12 @@ export interface FileInfo {
   author: string;
   tag: string;
   // 其他信息
-  other: Record<string, string>;
+  other: AnyObj;
 }
 
 export interface RouteItem1 extends RouteRecordNormalized {
   meta: {
-    frontmatter: Record<string, string>;
+    frontmatter: AnyObj;
   };
 }
 
@@ -40,6 +42,7 @@ export interface CommandHandleResult {
     | TreeFileItem[]
     | FileInfo
     | FileInfo[]
+    | AnyObj
     | string;
   path?: string;
   command: CommandInfo;
