@@ -1,3 +1,5 @@
-# Shellingfordly
+### [Shellingfordly](https://shellingfordly.github.io/)
 
-blog
+my personal website of a terminal interface.
+
+code is licensed under MIT.

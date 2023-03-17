@@ -19,11 +19,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "16.x"
-      - run: pnpm install
+      - run: npm install
 
       # 打包项目
       - name: Build
-        run: pnpm run build
+        run: npm run build
 
       # 部署到 GitHub Pages（可选）
       - name: Deploy to GitHub Pages
