@@ -10,8 +10,9 @@ const props = defineProps<{
 const commandRef = ref();
 const isActive = ref(true);
 const command = ref("");
-let commandCache: string[] = [];
-let index = -1;
+// 输入指令 历史缓存
+let commandCache: string[] = getCommandCache();
+let index = commandCache.length;
 
 const currentPath = () => {
   if (props.path) {
@@ -37,9 +38,9 @@ watch(
 );
 
 function onKeyup(e: any) {
-  const key = e.key;
+  const code = e.keyCode;
   // enter
-  if (key === "Enter") {
+  if (code == 13) {
     // 处理指令
     handleCommand(e.target.value);
     // 重新获取缓存
@@ -49,11 +50,11 @@ function onKeyup(e: any) {
     command.value = "";
   }
   // 方向键 上
-  else if (key === "ArrowUp") {
+  else if (code == 38) {
     command.value = commandCache[index > 0 ? --index : 0];
   }
   // 方向键下
-  else if (key === "ArrowDown") {
+  else if (code == 40) {
     command.value = index < commandCache.length ? commandCache[++index] : "";
   }
 }
