@@ -16,6 +16,10 @@ onUnmounted(() => {
 function onClick() {
   isDark.value = !isDark.value;
 }
+
+function onGithub() {
+  window.open("https://github.com/shellingfordly");
+}
 </script>
 
 <template>
@@ -42,7 +46,7 @@ function onClick() {
         @click="onClick"
       />
       <Icon v-else icon="ic:sharp-dark-mode" width="20px" @click="onClick" />
-      <Icon icon="mdi:github" width="20px" />
+      <Icon icon="mdi:github" width="20px" @click="onGithub" />
     </div>
   </div>
 </template>
