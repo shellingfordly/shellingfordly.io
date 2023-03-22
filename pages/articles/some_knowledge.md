@@ -153,7 +153,7 @@ class Promise {
 - 事件循环
   首先是脚本，然后是微任务，渲染等
 
-![event-loop](/assets/event-loop.png)
+<img src="/articles/event-loop.png" style="width: 300px">
 
 - 每个宏任务之后，引擎会立即执行微任务队列中的所有任务，然后再执行其他的宏任务，或渲染，或进行其他任何操作
 
