@@ -1,5 +1,5 @@
-### [shellingfordly](https://shellingfordly.vercel.app/)
+### [terminal](https://terminal.shellingfordly.vercel.app/)
 
-my personal website of a terminal interface.
+a simple terminal
 
 code is licensed under MIT.
